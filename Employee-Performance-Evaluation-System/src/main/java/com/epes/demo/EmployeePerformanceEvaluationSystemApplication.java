@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.epes.demo.mapper")
+@MapperScan("com.epes.demo.dao")
 public class EmployeePerformanceEvaluationSystemApplication {
 
 	public static void main(String[] args) {

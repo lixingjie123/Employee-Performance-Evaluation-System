@@ -1,6 +1,7 @@
-package com.epes.demo.mapper;
+package com.epes.demo.dao;
 
 import com.epes.demo.entity.Susers;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -12,8 +13,12 @@ import java.util.List;
  * Date: 2017-12-25
  * Time: 17:10
  */
-public interface SusersMapper {
+
+public interface SusersDao {
 
     @Select("select * from susers")
     List<Susers> findAll();
+
+    @Insert("insert into susers value (#{id},#{code},#{name},#{age},#{add},#{role})")
+    int insertUser(Susers susers);
 }

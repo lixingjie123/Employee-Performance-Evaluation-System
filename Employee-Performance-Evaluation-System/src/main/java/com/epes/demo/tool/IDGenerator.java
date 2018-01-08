@@ -1,6 +1,5 @@
 package com.epes.demo.tool;
 
-
 /**
  *
  * id生成器
@@ -8,8 +7,7 @@ package com.epes.demo.tool;
  * Description:
  * User: lixingjie
  * Date: 2018-01-04
- * Time: 16:08
- */
+ * Time: 16:08 */
 public class IDGenerator {
     //开始该类生成ID的时间截，1288834974657 (Thu, 04 Nov 2010 01:42:54 GMT) 这一时刻到当前时间所经过的毫秒数，占 41 位（还有一位是符号位，永远为 0）。
     private final long startTime = 1288834974657L;

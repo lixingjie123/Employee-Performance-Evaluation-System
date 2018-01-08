@@ -1,28 +1,82 @@
 package com.epes.demo;
 
+import com.epes.demo.entity.Susers;
+import com.epes.demo.service.IDService;
+import com.epes.demo.tool.Encryption;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EmployeePerformanceEvaluationSystemApplicationTests {
 
 	@Test
-	public void contextLoads() {
-		String key = "helleworld";
-		int arraySize = 11113; // 数组大小一般取质数
-		int hashCode = 0;
-		for (int i = 0; i < key.length(); i++) { // 从字符串的左边开始计算
-			int letterValue = key.charAt(i) - 96;// 将获取到的字符串转换成数字，比如a的码值是97，则97-96=1
-			// 就代表a的值，同理b=2；
-			hashCode = ((hashCode << 5) + letterValue) % arraySize;// 防止编码溢出，对每步结果都进行取模运算
-		}
-		System.out.println(hashCode);
+	public void contextLoads(){
+		IDService idService = new IDService();
+		System.out.println(idService.getIDToHexString());
+		System.out.println(idService.getCode("POR"));
 	}
 
+	/**
+	 * 密码加密测试
+	 */
+	@Test
+	public void testEncryptionByMd5() {
+		String password = "Li(2qqx)";
+		String password2 = "Li(2qqx)";
+		try {
+			password = Encryption.EncoderByMd5(password);
+			password2 = Encryption.EncoderByMd5(password2);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		System.out.println(password);
+		System.out.println(password2);
+		if (password.equals(password2)) {
+			System.out.println("完全相等");
+		}
+	}
+
+	/**
+	 * 密码加密测试
+	 */
+	@Test
+	public void testEncryptionBySha1(){
+		String password = "Li(2qqx)";
+		String password2 = "Li(2qqx)";
+		try {
+			password = Encryption.EncoderBySha1(password);
+			password2 = Encryption.EncoderBySha1(password2);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		System.out.println(password);
+		System.out.println(password2);
+		if (password.equals(password2)){
+			System.out.println("完全一样");
+		}
+	}
+
+	/**
+	 *
+	 */
+	@Test
+	public void insertUserTest(){
+		Map<String ,Object> map = new HashMap<>();
+		Susers susers = new Susers();
+		susers.setName("泽轩");
+		susers.setCode("MS001");
+		susers.setRole(1);
+		susers.setAdd("重庆沙坪坝");
+		susers.setAge(21);
+		System.out.println(map.get("message"));
+
+	}
 }

@@ -15,7 +15,7 @@ import java.util.Date;
  * Time: 16:13
  */
 public class IDService {
-    private  IDGenerator idGenerator = new IDGenerator(1l,31l);
+    private  IDGenerator idGenerator = new IDGenerator(1,2);
 
 
     private long getId(){
@@ -23,6 +23,11 @@ public class IDService {
     }
 
 
+    /**
+     * 获取当前时间的十六进制数
+     *
+     * @return
+     */
     @NotNull
     private String getDate(){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
@@ -31,12 +36,24 @@ public class IDService {
         return Long.toHexString(date);
     }
 
+    /**
+     * 获取生成ID的十六进制数
+     *
+     * @return
+     */
     public String getIDToHexString(){
         //新生成的时间节点ID
         long id = getId();
-        String hexId =Long.toHexString(id);
-        //在id末尾添加当前时间标识
-        hexId +=getDate();
-        return hexId;
+        return Long.toHexString(id);
+    }
+
+    /**
+     * 生成产品编号
+     * @param src 编号头
+     * @return
+     */
+    public String getCode(String src){
+        src +=getIDToHexString();
+        return src;
     }
 }

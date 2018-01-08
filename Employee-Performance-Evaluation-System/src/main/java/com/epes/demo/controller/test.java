@@ -1,11 +1,13 @@
 package com.epes.demo.controller;
 
 import com.epes.demo.entity.Susers;
-import com.epes.demo.mapper.SusersMapper;
+import java.util.*;
 import com.epes.demo.service.IDService;
+import com.epes.demo.service.SusersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -20,13 +22,10 @@ import java.util.List;
 
 @Controller
 public class test {
-    private final SusersMapper susersMapper;
-    private  IDService idService = new IDService();
 
     @Autowired
-    public test(SusersMapper susersMapper) {
-        this.susersMapper = susersMapper;
-    }
+    private SusersService susersService;
+    private  IDService idService = new IDService();
 
 
     @GetMapping(value = "/index",produces = "text/plain;charset=utf-8")
@@ -39,8 +38,15 @@ public class test {
     @GetMapping(value = "/findAllUsers")
     @ResponseBody
     public List<Susers> findAllUsers(){
-        List<Susers> users = susersMapper.findAll();
+        List<Susers> users = susersService.findAllUsers();
         return users;
+    }
+
+    @GetMapping(value = "/insertUser",produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public String insertUser(Susers user){
+        Map<String, String> map = susersService.addUser(user);
+        return map.get("message");
     }
 
 }

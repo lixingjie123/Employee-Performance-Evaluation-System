@@ -17,8 +17,8 @@ import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 public class Susers {
 
 
-    @Column(name = "id",type = MySqlTypeConstant.INT,length = 11,isKey = true,isAutoIncrement = true)
-    private Integer id;
+    @Column(name = "id",type = MySqlTypeConstant.VARCHAR,length = 32,isKey = true,isNull = false)
+    private String id;
 
     @Column(name = "code",type = MySqlTypeConstant.VARCHAR,isNull = false)
     private String code;
@@ -26,10 +26,10 @@ public class Susers {
     @Column(name = "name",type = MySqlTypeConstant.VARCHAR,isNull = false)
     private String name;
 
-    @Column(name = "age",type = MySqlTypeConstant.INT,isNull = false)
+    @Column(name = "age",type = MySqlTypeConstant.INT)
     private Integer age;
 
-    @Column(name = "add",type = MySqlTypeConstant.VARCHAR,length = 22)
+    @Column(name = "add",type = MySqlTypeConstant.VARCHAR)
     private String add;
 
     @Column(name = "role",type = MySqlTypeConstant.INT,isNull = false,length = 1)
@@ -43,11 +43,11 @@ public class Susers {
         this.role = role;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
