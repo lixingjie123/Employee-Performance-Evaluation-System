@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created with IntelliJ IDEA.
  * Description:
- * User: lixingjie
+ * @author lixingjie
  * Date: 2018-01-05
  * Time: 15:39
  */
-@Transactional
+@Transactional()
 @Service
 public class SusersService {
     private final SusersDao susersMapper;
@@ -32,7 +32,7 @@ public class SusersService {
      * @return
      */
     public Map<String ,String> addUser(Susers u){
-        Map<String , String> map = new HashMap<>();
+        Map<String , String> map = new HashMap<>(0);
         u.setId(UUID.randomUUID().toString().replaceAll("-",""));
        int p =0;
         p =  susersMapper.insertUser(u);

@@ -1,7 +1,6 @@
 package com.epes.demo.service;
 
-import com.epes.demo.tool.IDGenerator;
-import org.jetbrains.annotations.Contract;
+import com.epes.demo.tool.IdGenerator;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
@@ -10,12 +9,12 @@ import java.util.Date;
 /**
  * Created with IntelliJ IDEA.
  * Description:
- * User: lixingjie
- * Date: 2018-01-04
- * Time: 16:13
+ * @author lixingjie
+ * Date: 2018-01-05
+ * Time: 15:39
  */
-public class IDService {
-    private  IDGenerator idGenerator = new IDGenerator(1,2);
+public class IdService {
+    private IdGenerator idGenerator = new IdGenerator(1,2);
 
 
     private long getId(){
@@ -24,7 +23,7 @@ public class IDService {
 
 
     /**
-     * 获取当前时间的十六进制数
+     * 获取当前时间的十六进制数：yyyy MM dd HH mm ss
      *
      * @return
      */

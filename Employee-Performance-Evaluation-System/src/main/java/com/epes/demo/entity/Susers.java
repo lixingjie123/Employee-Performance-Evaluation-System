@@ -8,9 +8,9 @@ import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 /**
  * Created with IntelliJ IDEA.
  * Description:
- * User: lixingjie
- * Date: 2017-12-25
- * Time: 14:59
+ * @author lixingjie
+ * Date: 2018-01-05
+ * Time: 15:39
  */
 
 @Table(name = "susers")

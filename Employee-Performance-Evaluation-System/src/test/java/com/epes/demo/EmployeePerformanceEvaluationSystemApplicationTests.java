@@ -1,7 +1,7 @@
 package com.epes.demo;
 
 import com.epes.demo.entity.Susers;
-import com.epes.demo.service.IDService;
+import com.epes.demo.service.IdService;
 import com.epes.demo.tool.Encryption;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ public class EmployeePerformanceEvaluationSystemApplicationTests {
 
 	@Test
 	public void contextLoads(){
-		IDService idService = new IDService();
+		IdService idService = new IdService();
 		System.out.println(idService.getIDToHexString());
 		System.out.println(idService.getCode("POR"));
 	}

@@ -9,16 +9,25 @@ import java.util.List;
 /**
  * Created with IntelliJ IDEA.
  * Description:
- * User: lixingjie
- * Date: 2017-12-25
- * Time: 17:10
+ * @author lixingjie
+ * Date: 2018-01-05
+ * Time: 15:39
  */
 
 public interface SusersDao {
 
+    /**
+     * 查询所有用户
+     * @return
+     */
     @Select("select * from susers")
     List<Susers> findAll();
 
+    /**
+     * 新增一个用户
+     * @param susers
+     * @return
+     */
     @Insert("insert into susers value (#{id},#{code},#{name},#{age},#{add},#{role})")
     int insertUser(Susers susers);
 }

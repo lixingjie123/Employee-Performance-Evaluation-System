@@ -1,14 +1,15 @@
 package com.epes.demo.tool;
 
 /**
- *
- * id生成器
+ * ID生成器
  * Created with IntelliJ IDEA.
  * Description:
- * User: lixingjie
- * Date: 2018-01-04
- * Time: 16:08 */
-public class IDGenerator {
+ * @author lixingjie
+ * Date: 2018-01-05
+ * Time: 15:39
+ */
+
+public class IdGenerator {
     //开始该类生成ID的时间截，1288834974657 (Thu, 04 Nov 2010 01:42:54 GMT) 这一时刻到当前时间所经过的毫秒数，占 41 位（还有一位是符号位，永远为 0）。
     private final long startTime = 1288834974657L;
 
@@ -49,7 +50,7 @@ public class IDGenerator {
     //上次生成id的时间截
     private long lastTimestamp = -1L;
 
-    public IDGenerator(long workerId, long datacenterId){
+    public IdGenerator(long workerId, long datacenterId){
         if(workerId < 0 || workerId > maxWorkerId){
             throw new IllegalArgumentException(
                     String.format("workerId[%d] is less than 0 or greater than maxWorkerId[%d].", workerId, maxWorkerId));

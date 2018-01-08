@@ -1,31 +1,30 @@
 package com.epes.demo.controller;
 
 import com.epes.demo.entity.Susers;
-import java.util.*;
-import com.epes.demo.service.IDService;
+import com.epes.demo.service.IdService;
 import com.epes.demo.service.SusersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
  * Description:
- * User: lixingjie
- * Date: 2017-12-07
- * Time: 9:45
+ * @author lixingjie
+ * Date: 2018-01-05
+ * Time: 15:39
  */
 
 @Controller
-public class test {
+public class TestController {
 
     @Autowired
     private SusersService susersService;
-    private  IDService idService = new IDService();
+    private IdService idService = new IdService();
 
 
     @GetMapping(value = "/index",produces = "text/plain;charset=utf-8")
@@ -50,3 +49,4 @@ public class test {
     }
 
 }
+

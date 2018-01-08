@@ -8,10 +8,11 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Created with IntelliJ IDEA.
  * Description:
- * User: lixingjie
- * Date: 2017-12-28
- * Time: 15:08
+ * @author lixingjie
+ * Date: 2018-01-05
+ * Time: 15:39
  */
+
 @Configuration
 @AutoConfigureAfter(SpringConfig.class)
 public class MyBatisMapperScannerConfig {
