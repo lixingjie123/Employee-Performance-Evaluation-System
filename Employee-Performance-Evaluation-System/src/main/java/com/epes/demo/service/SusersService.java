@@ -1,6 +1,6 @@
 package com.epes.demo.service;
 
-import com.epes.demo.entity.Susers;
+import com.epes.demo.entity.SusersDO;
 import com.epes.demo.dao.SusersDao;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +31,12 @@ public class SusersService {
      * @param u
      * @return
      */
-    public Map<String ,String> addUser(Susers u){
+    public Map<String ,String> addUser(SusersDO u){
         Map<String , String> map = new HashMap<>(0);
-        u.setId(UUID.randomUUID().toString().replaceAll("-",""));
-       int p =0;
-        p =  susersMapper.insertUser(u);
-        if (p>0){
+        u.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+       int p = 0;
+        p = susersMapper.insertUser(u);
+        if (p > 0){
             map.put("message","创建成功");
         }
         return map;
@@ -46,7 +46,7 @@ public class SusersService {
      * 查找所有用户
      * @return
      */
-    public List<Susers> findAllUsers(){
-        return susersMapper.findAll();
+    public List<SusersDO> findAllUsers(){
+        return susersMapper.findAllUser();
     }
 }

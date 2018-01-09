@@ -14,7 +14,7 @@ import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
  */
 
 @Table(name = "susers")
-public class Susers {
+public class SusersDO {
 
 
     @Column(name = "id",type = MySqlTypeConstant.VARCHAR,length = 32,isKey = true,isNull = false)

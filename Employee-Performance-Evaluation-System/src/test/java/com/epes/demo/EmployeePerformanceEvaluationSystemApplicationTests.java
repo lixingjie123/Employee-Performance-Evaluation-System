@@ -1,6 +1,6 @@
 package com.epes.demo;
 
-import com.epes.demo.entity.Susers;
+import com.epes.demo.entity.SusersDO;
 import com.epes.demo.service.IdService;
 import com.epes.demo.tool.Encryption;
 import org.junit.Test;
@@ -24,45 +24,6 @@ public class EmployeePerformanceEvaluationSystemApplicationTests {
 		System.out.println(idService.getCode("POR"));
 	}
 
-	/**
-	 * 密码加密测试
-	 */
-	@Test
-	public void testEncryptionByMd5() {
-		String password = "Li(2qqx)";
-		String password2 = "Li(2qqx)";
-		try {
-			password = Encryption.EncoderByMd5(password);
-			password2 = Encryption.EncoderByMd5(password2);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		System.out.println(password);
-		System.out.println(password2);
-		if (password.equals(password2)) {
-			System.out.println("完全相等");
-		}
-	}
-
-	/**
-	 * 密码加密测试
-	 */
-	@Test
-	public void testEncryptionBySha1(){
-		String password = "Li(2qqx)";
-		String password2 = "Li(2qqx)";
-		try {
-			password = Encryption.EncoderBySha1(password);
-			password2 = Encryption.EncoderBySha1(password2);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		System.out.println(password);
-		System.out.println(password2);
-		if (password.equals(password2)){
-			System.out.println("完全一样");
-		}
-	}
 
 	/**
 	 *
@@ -70,7 +31,7 @@ public class EmployeePerformanceEvaluationSystemApplicationTests {
 	@Test
 	public void insertUserTest(){
 		Map<String ,Object> map = new HashMap<>();
-		Susers susers = new Susers();
+		SusersDO susers = new SusersDO();
 		susers.setName("泽轩");
 		susers.setCode("MS001");
 		susers.setRole(1);

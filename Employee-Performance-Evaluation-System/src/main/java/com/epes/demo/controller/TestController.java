@@ -1,6 +1,6 @@
 package com.epes.demo.controller;
 
-import com.epes.demo.entity.Susers;
+import com.epes.demo.entity.SusersDO;
 import com.epes.demo.service.IdService;
 import com.epes.demo.service.SusersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +36,14 @@ public class TestController {
 
     @GetMapping(value = "/findAllUsers")
     @ResponseBody
-    public List<Susers> findAllUsers(){
-        List<Susers> users = susersService.findAllUsers();
+    public List<SusersDO> findAllUsers(){
+        List<SusersDO> users = susersService.findAllUsers();
         return users;
     }
 
     @GetMapping(value = "/insertUser",produces = "text/plain;charset=utf-8")
     @ResponseBody
-    public String insertUser(Susers user){
+    public String insertUser(SusersDO user){
         Map<String, String> map = susersService.addUser(user);
         return map.get("message");
     }

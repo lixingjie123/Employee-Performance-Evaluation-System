@@ -25,8 +25,7 @@ public class Encryption {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(src.getBytes());
         String afterHexSrc = toHexString(md.digest());
-        src = afterHexSrc.replaceAll(" ","");
-        return src;
+        return afterHexSrc.replaceAll(" ","");
     }
 
     /**
@@ -40,8 +39,26 @@ public class Encryption {
         MessageDigest md = MessageDigest.getInstance("SHA1");
         md.update(src.getBytes());
         String afterHexSrc = toHexString(md.digest());
-        System.out.println(afterHexSrc);
-        src = afterHexSrc.replaceAll(" ","");
-        return src;
+        return afterHexSrc.replaceAll(" ","");
+    }
+
+    /**
+     * 自定义加密摘要算法
+     *
+     * @param src
+     * @return 16进制字符串
+     * @throws NoSuchAlgorithmException
+     */
+    public static String encoder(String src, String algorithm) throws NoSuchAlgorithmException {
+
+        try {
+            MessageDigest md  = MessageDigest.getInstance(algorithm);
+            md.update(src.getBytes());
+            String afterHexSrc = toHexString(md.digest());
+            return afterHexSrc.replaceAll(" ","");
+        } catch (NoSuchAlgorithmException  e) {
+           throw new NoSuchAlgorithmException(algorithm+" not algorithm found");
+        }
+
     }
 }

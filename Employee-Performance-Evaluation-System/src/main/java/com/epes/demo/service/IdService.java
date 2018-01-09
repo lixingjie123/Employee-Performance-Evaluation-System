@@ -29,9 +29,9 @@ public class IdService {
      */
     @NotNull
     private String getDate(){
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
-        String c=sdf.format(new Date());
-        long date = Long.parseLong(c);
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyyMMddHHmmss");
+        String gatDate = simpleDateFormat.format(new Date());
+        long date = Long.parseLong(gatDate);
         return Long.toHexString(date);
     }
 
@@ -52,7 +52,7 @@ public class IdService {
      * @return
      */
     public String getCode(String src){
-        src +=getIDToHexString();
+        src += getIDToHexString();
         return src;
     }
 }
