@@ -8,3 +8,16 @@ spring:
     password: 123456
 mybatis:
   type-aliases-package: com.epes.demo.entity
+
+logging:
+  level:
+    root: info
+    com:
+      epes:
+        demo:
+          dao: debug
+    org:
+      mybatis: warn
+      springframework:
+        web: info
+  path: /output/logger/

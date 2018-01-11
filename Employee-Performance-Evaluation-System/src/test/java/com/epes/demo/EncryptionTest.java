@@ -9,6 +9,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
+import static org.apache.tomcat.util.buf.HexUtils.toHexString;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -30,8 +32,8 @@ public class EncryptionTest {
     public void testEncryptionByMd5() throws NoSuchAlgorithmException {
         String password = "Li(2qqx)";
         String password2 = "Li(2qqx)";
-        password = Encryption.encoderByMd5(password);
-        password2 = Encryption.encoderByMd5(password2);
+        password = toHexString(Encryption.encoderByMd5(password));
+        password2 = toHexString(Encryption.encoderByMd5(password2));
         System.out.println(password);
         System.out.println(password2);
         if (password.equals(password2)) {
@@ -46,8 +48,8 @@ public class EncryptionTest {
     public void testEncryptionBySha1() throws NoSuchAlgorithmException {
         String password = "Li(2qqx)";
         String password2 = "Li(2qqx)";
-        password = Encryption.encoderBySha1(password);
-        password2 = Encryption.encoderBySha1(password2);
+        password = toHexString(Encryption.encoderBySha1(password));
+        password2 =toHexString(Encryption.encoderBySha1(password2));
         System.out.println(password);
         System.out.println(password2);
         if (password.equals(password2)) {

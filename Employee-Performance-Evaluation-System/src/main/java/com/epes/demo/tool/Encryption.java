@@ -18,28 +18,26 @@ public class Encryption {
     /**
      * 字符串按照MD5加密
      * @param src
-     * @return 16进制字符串
+     * @return byte[]
      * @throws NoSuchAlgorithmException
      */
-    public static String encoderByMd5(String src) throws NoSuchAlgorithmException {
+    public static byte[] encoderByMd5(String src) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(src.getBytes());
-        String afterHexSrc = toHexString(md.digest());
-        return afterHexSrc.replaceAll(" ","");
+        return md.digest();
     }
 
     /**
      * 字符串按照SHA1加密
      *
      * @param src
-     * @return 16进制字符串
+     * @return byte[]
      * @throws NoSuchAlgorithmException
      */
-    public static String encoderBySha1(String src) throws NoSuchAlgorithmException {
+    public static byte[] encoderBySha1(String src) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA1");
         md.update(src.getBytes());
-        String afterHexSrc = toHexString(md.digest());
-        return afterHexSrc.replaceAll(" ","");
+        return md.digest();
     }
 
     /**
@@ -59,6 +57,5 @@ public class Encryption {
         } catch (NoSuchAlgorithmException  e) {
            throw new NoSuchAlgorithmException(algorithm+" not algorithm found");
         }
-
     }
 }

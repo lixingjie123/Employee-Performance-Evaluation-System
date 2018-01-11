@@ -1,6 +1,6 @@
 package com.epes.demo.dao;
 
-import com.epes.demo.entity.SusersDO;
+import com.epes.demo.entity.Suser;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
@@ -14,20 +14,20 @@ import java.util.List;
  * Time: 15:39
  */
 
-public interface SusersDao {
+public interface SuserDao {
 
     /**
      * 查询所有用户
      * @return
      */
-    @Select("select * from susers")
-    List<SusersDO> findAllUser();
+    @Select("select * from suser")
+    List<Suser> findAllUser();
 
     /**
      * 新增一个用户
      * @param susers
      * @return
      */
-    @Insert("insert into susers value (#{id},#{code},#{name},#{age},#{add},#{role})")
-    int insertUser(SusersDO susers);
+    @Insert("insert into suser value (#{id},#{code},#{name},#{age},#{add},#{role})")
+    int insertUser(Suser susers);
 }

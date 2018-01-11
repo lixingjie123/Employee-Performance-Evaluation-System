@@ -1,15 +1,13 @@
 package com.epes.demo;
 
-import com.epes.demo.entity.SusersDO;
+import com.epes.demo.entity.Suser;
 import com.epes.demo.service.IdService;
-import com.epes.demo.tool.Encryption;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 
@@ -31,7 +29,7 @@ public class EmployeePerformanceEvaluationSystemApplicationTests {
 	@Test
 	public void insertUserTest(){
 		Map<String ,Object> map = new HashMap<>();
-		SusersDO susers = new SusersDO();
+		Suser susers = new Suser();
 		susers.setName("泽轩");
 		susers.setCode("MS001");
 		susers.setRole(1);

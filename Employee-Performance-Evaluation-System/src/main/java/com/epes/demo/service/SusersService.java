@@ -1,7 +1,7 @@
 package com.epes.demo.service;
 
-import com.epes.demo.entity.SusersDO;
-import com.epes.demo.dao.SusersDao;
+import com.epes.demo.entity.Suser;
+import com.epes.demo.dao.SuserDao;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional()
 @Service
 public class SusersService {
-    private final SusersDao susersMapper;
+    private final SuserDao susersMapper;
 
     @Autowired
-    public SusersService(SusersDao susersMapper) {
+    public SusersService(SuserDao susersMapper) {
         this.susersMapper = susersMapper;
     }
 
@@ -31,7 +31,7 @@ public class SusersService {
      * @param u
      * @return
      */
-    public Map<String ,String> addUser(SusersDO u){
+    public Map<String ,String> addUser(Suser u){
         Map<String , String> map = new HashMap<>(0);
         u.setId(UUID.randomUUID().toString().replaceAll("-", ""));
        int p = 0;
@@ -46,7 +46,7 @@ public class SusersService {
      * 查找所有用户
      * @return
      */
-    public List<SusersDO> findAllUsers(){
+    public List<Suser> findAllUsers(){
         return susersMapper.findAllUser();
     }
 }

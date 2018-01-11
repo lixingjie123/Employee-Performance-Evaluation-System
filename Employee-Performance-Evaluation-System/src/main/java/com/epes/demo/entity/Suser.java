@@ -13,14 +13,14 @@ import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
  * Time: 15:39
  */
 
-@Table(name = "susers")
-public class SusersDO {
+@Table(name = "suser")
+public class Suser {
 
 
     @Column(name = "id",type = MySqlTypeConstant.VARCHAR,length = 32,isKey = true,isNull = false)
     private String id;
 
-    @Column(name = "code",type = MySqlTypeConstant.VARCHAR,isNull = false)
+    @Column(name = "code",type = MySqlTypeConstant.VARCHAR,isNull = false,isUnique = true)
     private String code;
 
     @Column(name = "name",type = MySqlTypeConstant.VARCHAR,isNull = false)
@@ -81,5 +81,17 @@ public class SusersDO {
 
     public void setAdd(String add) {
         this.add = add;
+    }
+
+    @Override
+    public String toString() {
+        return "Suser{" +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", add='" + add + '\'' +
+                ", role=" + role +
+                '}';
     }
 }
