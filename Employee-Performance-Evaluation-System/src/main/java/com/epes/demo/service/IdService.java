@@ -2,7 +2,10 @@ package com.epes.demo.service;
 
 import com.epes.demo.tool.IdGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,6 +17,7 @@ import java.util.Date;
  * Time: 15:39
  */
 public class IdService {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     private IdGenerator idGenerator = new IdGenerator(1,2);
 
 
@@ -47,12 +51,45 @@ public class IdService {
     }
 
     /**
-     * 生成产品编号
-     * @param src 编号头
+     * 生成某类产品编号
+     * @param  className
      * @return
      */
-    public String getCode(String src){
-        src += getIDToHexString();
-        return src;
+    public <T> String getCode(Class<T> className) throws NoSuchFieldException {
+        try {
+            // 获取该实体类的code_title
+            Field field = className.getField("CODE_TITLE");
+            String codeTitle = field.get(className).toString();
+            // 添加生成的编号
+            codeTitle += getId();
+            return codeTitle;
+        }catch (NoSuchFieldException e){
+            logger.error(className.getSimpleName()+" class not found 'code_title' field");
+            throw new NoSuchFieldException(className.getSimpleName() + " class not found 'code_title' field");
+        }catch (IllegalAccessException ignored){
+            logger.error(className.getSimpleName() + " class code_title Field Can't access");
+            throw new NoSuchFieldException(className.getSimpleName() + " class code_title Field Can't access");
+        }
     }
+
+    /***
+     * 生成带某编号头的编号
+     * @param codetitle
+     * @return
+     */
+    public String getCode(String codetitle){
+        codetitle += getId();
+        return codetitle;
+    }
+
+   /* public <T> void getCC(Class<T> className){
+        //获取该实体所有属性
+        Field[] allField = className.getDeclaredFields();
+        for (Field field : allField){
+            Annotation[] fieldAnnotations= field.getAnnotations();
+            for (Annotation annotation : fieldAnnotations){
+                System.out.println(field.getName() + " : " + annotation.toString());
+            }
+        }
+    }*/
 }

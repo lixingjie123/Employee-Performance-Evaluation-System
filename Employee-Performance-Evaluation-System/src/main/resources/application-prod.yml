@@ -1,5 +1,10 @@
 server:
-  port: 8081
-client:
-  age: 43
-  name: 李四
+  port: 9999
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true

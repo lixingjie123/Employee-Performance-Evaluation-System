@@ -16,10 +16,13 @@ import java.util.HashMap;
 public class EmployeePerformanceEvaluationSystemApplicationTests {
 
 	@Test
-	public void contextLoads(){
+	public void contextLoads() throws NoSuchFieldException, IllegalAccessException {
 		IdService idService = new IdService();
 		System.out.println(idService.getIDToHexString());
-		System.out.println(idService.getCode("POR"));
+		for (int i = 0; i<10; i++) {
+			System.out.println(idService.getCode(Suser.class));
+		}
+		System.out.println(idService.getCode("UR"));
 	}
 
 

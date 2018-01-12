@@ -2,6 +2,7 @@ package com.epes.demo.controller;
 
 
 import com.epes.demo.entity.Suser;
+import com.epes.demo.service.BaseService;
 import com.epes.demo.service.IdService;
 import com.epes.demo.service.SusersService;
 import org.slf4j.Logger;
@@ -9,12 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,22 +30,19 @@ public class TestController {
 
     @Autowired
     private SusersService susersService;
-    private IdService idService = new IdService();
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping(value = "/login")
     @ResponseBody
-    public Map<String,Object> login(HttpServletRequest request, HttpServletResponse response){
+    public Map<String,Object> login(){
         //日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出。
         logger.trace("日志输出 trace");
         logger.debug("日志输出 debug");
         logger.info("日志输出 info");
         logger.warn("日志输出 warn");
         logger.error("日志输出 error");
-        Map<String,Object> map =new HashMap<String,Object>();
-        String userName=request.getParameter("userName");
-        String password=request.getParameter("password");
+        Map<String,Object> map =new HashMap<String,Object>(0);
         return map;
     }
 
@@ -61,15 +55,19 @@ public class TestController {
 
     @GetMapping(value = "/findAllUsers")
     @ResponseBody
-    public List<Suser> findAllUsers(){
-        List<Suser> users = susersService.findAllUsers();
-        return users;
+    public List<Suser> findAllUsers() throws NoSuchFieldException, IllegalAccessException {
+        return susersService.findAllUsers();
     }
 
     @GetMapping(value = "/insertUser",produces = "text/plain;charset=utf-8")
     @ResponseBody
-    public String insertUser(Suser user){
-        Map<String, String> map = susersService.addUser(user);
+    public String insertUser() throws NoSuchFieldException {
+        Suser suser= new Suser();
+        suser.setAdd("渝北");
+        suser.setName("张三");
+        suser.setRole(1);
+        suser.setAge(21);
+        Map<String, String> map = susersService.addUser(suser);
         return map.get("message");
     }
 
