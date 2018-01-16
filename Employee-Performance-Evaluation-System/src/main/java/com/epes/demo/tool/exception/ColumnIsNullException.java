@@ -1,4 +1,4 @@
-package com.epes.demo.tool.Exception;
+package com.epes.demo.tool.exception;
 
 /**
  * Description:

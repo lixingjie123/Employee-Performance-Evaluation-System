@@ -1,13 +1,11 @@
 package com.epes.demo.service;
 
-import com.epes.demo.entity.BaseEntity;
 import com.epes.demo.entity.Suser;
 import com.epes.demo.dao.SuserDao;
 import java.util.*;
 
-import com.epes.demo.tool.Exception.ColumnIsNullException;
-import com.epes.demo.tool.Exception.NotTableEntityException;
-import com.gitee.sunchenbin.mybatis.actable.manager.common.BaseMysqlCRUDManagerImpl;
+import com.epes.demo.tool.exception.ColumnIsNullException;
+import com.epes.demo.tool.exception.NotTableEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,11 +42,23 @@ public class SusersService {
         Map<String , String> map = new HashMap<>(0);
         u.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         u.setCode(idService.getCode(Suser.class));
-      // u.setGmtCreate(new Date("yyyy-MM-dd HH:mm:ss"));
         try {
             baseService.save(u);
             map.put("message","成功");
         } catch (NotTableEntityException | ColumnIsNullException | IllegalAccessException e) {
+            map.put("message", e.getMessage());
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    public Map<String,String> updataUser(Suser suser){
+        Map<String, String> map = new HashMap<>(0);
+        try {
+            baseService.updata(suser);
+            map.put("message","修改成功");
+        } catch (NotTableEntityException | ColumnIsNullException | IllegalAccessException e) {
+            map.put("message", e.getMessage());
             e.printStackTrace();
         }
         return map;

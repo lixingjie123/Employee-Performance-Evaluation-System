@@ -71,5 +71,19 @@ public class TestController {
         return map.get("message");
     }
 
+    @GetMapping(value = "/updateUser",produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public String updateUser() throws NoSuchFieldException {
+        Suser suser= new Suser();
+        suser.setAdd("江北");
+        suser.setName("张三");
+        suser.setRole(1);
+        suser.setAge(21);
+        suser.setId("42a19988f3e34b5189ea706e1038a76a");
+        suser.setCode("UX953081851571081216");
+        Map<String, String> map = susersService.updataUser(suser);
+        return map.get("message");
+    }
+
 }
 

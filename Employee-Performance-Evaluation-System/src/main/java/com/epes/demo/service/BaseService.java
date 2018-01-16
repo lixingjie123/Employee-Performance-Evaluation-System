@@ -1,16 +1,19 @@
 package com.epes.demo.service;
 
 import com.epes.demo.dao.BaseDao;
-import com.epes.demo.tool.Exception.ColumnIsNullException;
-import com.epes.demo.tool.Exception.NotTableEntityException;
+import com.epes.demo.tool.exception.ColumnIsNullException;
+import com.epes.demo.tool.exception.NotTableEntityException;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,7 +30,7 @@ import java.util.Objects;
 @Service
 public class BaseService {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final BaseDao dao;
 
@@ -36,8 +39,18 @@ public class BaseService {
         this.dao = dao;
     }
 
+    /**
+     * 保存
+     * @param obj
+     * @param <T>
+     * @return
+     * @throws NotTableEntityException
+     * @throws IllegalAccessException
+     * @throws ColumnIsNullException
+     */
     public <T> int save(T obj) throws NotTableEntityException, IllegalAccessException, ColumnIsNullException {
         Table annotation = obj.getClass().getAnnotation(Table.class);
+        int p = 0;
         if (annotation != null ){
             Map<String, Object> fieldMap = new HashMap<>(0);
             String tableName = annotation.name();
@@ -46,63 +59,111 @@ public class BaseService {
                 // 获取父类所有属性
                 Field[] superFields = obj.getClass().getSuperclass().getDeclaredFields();
                 // 获取父类字段名和字段值
-                for (Field superField : superFields){
-                    Column column = superField.getAnnotation(Column.class);
-                    if (column != null){
-                        superField.setAccessible(true);
-                        Class type = superField.getType();
-                        // superField是父类的属性  obj是子类；
-                        Object val = superField.get(obj);
-                        if (!column.isNull() && val == null){
-                            logger.error("非空字段："+column.name()+" 值为空");
-                            throw new ColumnIsNullException("非空字段："+column.name()+" 值为空");
-
-                        }else {
-                            if (Objects.equals(type.getName(), "java.lang.String")){
-                                val = "'" + val + "'";
-                            }
-                            String key = column.name();
-                            fieldMap.put(key, val);
-                        }
-                    }
-                }
+                fieldMap.putAll(getFieldValue(superFields, obj));
             }
             // 获取子类字段名和字段值
-            for (Field sonField : sonFields) {
-                Column column = sonField.getAnnotation(Column.class);
-                if (column != null) {
-                    sonField.setAccessible(true);
-                    Object val = sonField.get(obj);
-                    Class type = sonField.getType();
-                    if (!column.isNull() && val == null){
-                        logger.error("非空字段："+column.name()+" 值为空");
-                        throw new ColumnIsNullException("非空字段："+column.name()+" 值为空");
-                    }else {
-                        if (Objects.equals(type.getName(), "java.lang.String")){
-                            val = "'" + val + "'";
-                        }
-                        String key = column.name();
-                        fieldMap.put(key, val);
-                    }
-                }
-            }
+            fieldMap.putAll(getFieldValue(sonFields, obj));
+            // 设置新增日期
+            fieldMap.put("gmt_create",getDateToString());
             StringBuilder sqlField = new StringBuilder();
             StringBuilder sqlVal = new StringBuilder();
             if (fieldMap.size() > 0){
+                // 生成SQL所需的语句段
                 for (String key: fieldMap.keySet()) {
                     sqlField.append(key);
                     sqlVal.append(fieldMap.get(key));
                     sqlField.append(',');
                     sqlVal.append(',');
                 }
+                sqlField.deleteCharAt(sqlField.length()-1);
+                sqlVal.deleteCharAt(sqlVal.length()-1);
             }
-            sqlField.deleteCharAt(sqlField.length()-1);
-            sqlVal.deleteCharAt(sqlVal.length()-1);
-            dao.insert(tableName,sqlField.toString(),sqlVal.toString());
+            p = dao.insert(tableName,sqlField.toString(),sqlVal.toString());
         }else {
             logger.error("'"+obj.getClass().getSimpleName() + "' 类不是表格实体");
             throw new NotTableEntityException("'"+obj.getClass().getSimpleName() + "' 类不是表格实体");
         }
-        return 0;
+        return p;
+    }
+
+    /**
+     *
+     * 修改某个表数据
+     * @param obj
+     * @param <T>
+     * @return
+     */
+    public <T> int updata(T obj) throws ColumnIsNullException, IllegalAccessException, NotTableEntityException {
+        Table annotation = obj.getClass().getAnnotation(Table.class);
+        int p = 0;
+        if (annotation != null){
+            Map<String, Object> fieldMap = new HashMap<>(0);
+            String tableName = annotation.name();
+            Field[] sonField = obj.getClass().getDeclaredFields();
+            if (obj.getClass().getSuperclass() != null){
+                Field[] superField = obj.getClass().getSuperclass().getDeclaredFields();
+                fieldMap.putAll(getFieldValue(superField, obj));
+            }
+            fieldMap.putAll(getFieldValue(sonField, obj));
+            fieldMap.put("gmt_modified", getDateToString());
+            StringBuilder sqlVal = new StringBuilder();
+            if (fieldMap.size() > 0){
+                for (String key: fieldMap.keySet()) {
+                    if (fieldMap.get(key) != null && !"''".equals(fieldMap.get(key))){
+                        sqlVal.append(key + "=" + fieldMap.get(key) + ",");
+                    }
+                }
+                sqlVal.deleteCharAt(sqlVal.length()-1);
+            }
+            p = dao.updata(tableName, sqlVal.toString(),fieldMap.get("id").toString());
+        }else {
+            logger.error("'"+obj.getClass().getSimpleName() + "' 类不是表格实体");
+            throw new NotTableEntityException("'"+obj.getClass().getSimpleName() + "' 类不是表格实体");
+        }
+        return p;
+    }
+
+    /**
+     * 查询Column注解，获取字段名与值
+     * @param fields
+     * @param obj
+     * @param <T>
+     * @return
+     * @throws ColumnIsNullException
+     * @throws IllegalAccessException
+     */
+    private <T> Map<String, Object> getFieldValue(Field[] fields, T obj) throws ColumnIsNullException, IllegalAccessException {
+        Map<String, Object> fieldMap = new HashMap<>(0);
+        for (Field field : fields){
+            Column column = field.getAnnotation(Column.class);
+            if (column != null){
+                field.setAccessible(true);
+                Class type = field.getType();
+                // superField是父类的属性  obj是子类；
+                Object val = field.get(obj);
+                if (!column.isNull() && val == null){
+                    logger.error("非空字段："+column.name()+" 值为空");
+                    throw new ColumnIsNullException("非空字段："+column.name()+" 值为空");
+                }else {
+                    if (Objects.equals(type.getName(), "java.lang.String")){
+                        val = "'" + val + "'";
+                    }
+                    String key = column.name();
+                    fieldMap.put(key, val);
+                }
+            }
+        }
+        return fieldMap;
+    }
+
+    /**
+     * 获取当前系统时间，并返回时间字符串
+     * @return
+     */
+    @NotNull
+    private String getDateToString(){
+        // 设置日期格式
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return "'" + df.format(new Date()) + "'";
     }
 }
