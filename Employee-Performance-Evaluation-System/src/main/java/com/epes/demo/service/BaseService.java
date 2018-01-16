@@ -1,11 +1,13 @@
 package com.epes.demo.service;
 
 import com.epes.demo.dao.BaseDao;
+import com.epes.demo.entity.BaseEntity;
 import com.epes.demo.tool.exception.ColumnIsNullException;
 import com.epes.demo.tool.exception.NotTableEntityException;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -40,31 +39,30 @@ public class BaseService {
     }
 
     /**
-     * 保存
-     * @param obj
+     * 插入一条数据
+     * @param entity
      * @param <T>
      * @return
      * @throws NotTableEntityException
      * @throws IllegalAccessException
      * @throws ColumnIsNullException
      */
-    public <T> int save(T obj) throws NotTableEntityException, IllegalAccessException, ColumnIsNullException {
-        Table annotation = obj.getClass().getAnnotation(Table.class);
+    public <T extends BaseEntity> int insert(T entity) throws NotTableEntityException, IllegalAccessException, ColumnIsNullException {
+       String tableName = getTableName(entity.getClass());
         int p = 0;
-        if (annotation != null ){
+        if (tableName != null ){
             Map<String, Object> fieldMap = new HashMap<>(0);
-            String tableName = annotation.name();
-            Field[] sonFields = obj.getClass().getDeclaredFields();
-            if (obj.getClass().getSuperclass() !=null) {
+            Field[] sonFields = entity.getClass().getDeclaredFields();
+            if (entity.getClass().getSuperclass() !=null) {
                 // 获取父类所有属性
-                Field[] superFields = obj.getClass().getSuperclass().getDeclaredFields();
+                Field[] superFields = entity.getClass().getSuperclass().getDeclaredFields();
                 // 获取父类字段名和字段值
-                fieldMap.putAll(getFieldValue(superFields, obj));
+                fieldMap.putAll(getFieldValue(superFields, entity));
             }
             // 获取子类字段名和字段值
-            fieldMap.putAll(getFieldValue(sonFields, obj));
+            fieldMap.putAll(getFieldValue(sonFields, entity));
             // 设置新增日期
-            fieldMap.put("gmt_create",getDateToString());
+            fieldMap.put("createtime",getDateToString());
             StringBuilder sqlField = new StringBuilder();
             StringBuilder sqlVal = new StringBuilder();
             if (fieldMap.size() > 0){
@@ -80,34 +78,33 @@ public class BaseService {
             }
             p = dao.insert(tableName,sqlField.toString(),sqlVal.toString());
         }else {
-            logger.error("'"+obj.getClass().getSimpleName() + "' 类不是表格实体");
-            throw new NotTableEntityException("'"+obj.getClass().getSimpleName() + "' 类不是表格实体");
+            logger.error("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
         }
         return p;
     }
 
     /**
-     *
-     * 修改某个表数据
-     * @param obj
+     * 通过 id 修改数据
+     * @param entity
      * @param <T>
      * @return
      */
-    public <T> int updata(T obj) throws ColumnIsNullException, IllegalAccessException, NotTableEntityException {
-        Table annotation = obj.getClass().getAnnotation(Table.class);
+    public <T extends BaseEntity> int updata(T entity) throws ColumnIsNullException, IllegalAccessException, NotTableEntityException {
+        String tableName = getTableName(entity.getClass());
         int p = 0;
-        if (annotation != null){
+        if (tableName != null){
             Map<String, Object> fieldMap = new HashMap<>(0);
-            String tableName = annotation.name();
-            Field[] sonField = obj.getClass().getDeclaredFields();
-            if (obj.getClass().getSuperclass() != null){
-                Field[] superField = obj.getClass().getSuperclass().getDeclaredFields();
-                fieldMap.putAll(getFieldValue(superField, obj));
+            Field[] sonField = entity.getClass().getDeclaredFields();
+            if (entity.getClass().getSuperclass() != null){
+                Field[] superField = entity.getClass().getSuperclass().getDeclaredFields();
+                fieldMap.putAll(getFieldValue(superField, entity));
             }
-            fieldMap.putAll(getFieldValue(sonField, obj));
-            fieldMap.put("gmt_modified", getDateToString());
+            fieldMap.putAll(getFieldValue(sonField, entity));
+            fieldMap.put("modifiedtime", getDateToString());
             StringBuilder sqlVal = new StringBuilder();
             if (fieldMap.size() > 0){
+                // 生成所需的SQL语句段
                 for (String key: fieldMap.keySet()) {
                     if (fieldMap.get(key) != null && !"''".equals(fieldMap.get(key))){
                         sqlVal.append(key + "=" + fieldMap.get(key) + ",");
@@ -117,22 +114,36 @@ public class BaseService {
             }
             p = dao.updata(tableName, sqlVal.toString(),fieldMap.get("id").toString());
         }else {
-            logger.error("'"+obj.getClass().getSimpleName() + "' 类不是表格实体");
-            throw new NotTableEntityException("'"+obj.getClass().getSimpleName() + "' 类不是表格实体");
+            logger.error("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
         }
+        return p;
+    }
+
+    /**
+     * 通过 id 删除表数据
+     * @param entity
+     * @param id
+     * @param <T>
+     * @return
+     */
+    public <T extends BaseEntity> int delete(Class<T> entity, String id){
+        int p = 0;
+        String tableName = getTableName(entity);
+        p = dao.delete(tableName, id);
         return p;
     }
 
     /**
      * 查询Column注解，获取字段名与值
      * @param fields
-     * @param obj
+     * @param entity
      * @param <T>
      * @return
      * @throws ColumnIsNullException
      * @throws IllegalAccessException
      */
-    private <T> Map<String, Object> getFieldValue(Field[] fields, T obj) throws ColumnIsNullException, IllegalAccessException {
+    private <T extends BaseEntity> Map<String, Object> getFieldValue(Field[] fields, T entity) throws ColumnIsNullException, IllegalAccessException {
         Map<String, Object> fieldMap = new HashMap<>(0);
         for (Field field : fields){
             Column column = field.getAnnotation(Column.class);
@@ -140,7 +151,7 @@ public class BaseService {
                 field.setAccessible(true);
                 Class type = field.getType();
                 // superField是父类的属性  obj是子类；
-                Object val = field.get(obj);
+                Object val = field.get(entity);
                 if (!column.isNull() && val == null){
                     logger.error("非空字段："+column.name()+" 值为空");
                     throw new ColumnIsNullException("非空字段："+column.name()+" 值为空");
@@ -156,6 +167,8 @@ public class BaseService {
         return fieldMap;
     }
 
+
+
     /**
      * 获取当前系统时间，并返回时间字符串
      * @return
@@ -165,5 +178,21 @@ public class BaseService {
         // 设置日期格式
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return "'" + df.format(new Date()) + "'";
+    }
+
+    /**
+     * 获取表名
+     * @param entityClass
+     * @param <T>
+     * @return
+     */
+    @Nullable
+    private <T extends BaseEntity> String getTableName(Class<T> entityClass){
+        Table table = entityClass.getAnnotation(Table.class);
+        if (table != null){
+            return table.name();
+        }else {
+            return null;
+        }
     }
 }

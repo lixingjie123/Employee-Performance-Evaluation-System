@@ -1,8 +1,9 @@
 package com.epes.demo.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
+import com.epes.demo.entity.BaseEntity;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * Description:
@@ -28,8 +29,23 @@ public interface BaseDao {
      * 公共接口：通过 id 修改数据库数据
      * @param tableName
      * @param val
+     * @param id
      * @return
      */
     @Update("update ${tableName} set ${val} where id = ${id}")
     int updata(@Param("tableName")String tableName, @Param("val")String val, @Param("id")String id);
+
+    /**
+     * 公共接口：通过 id 删除数据库数据
+     * @param tableName
+     * @param id
+     * @return
+     */
+    @Delete("delete from ${tableName} where id = #{id}")
+    int delete(@Param("tableName")String tableName, @Param("id")String id);
+
+    /*
+    @Select("select * from ${tableName}")
+    <T extends BaseEntity> List<T> query(@Param("tableName")String tableName);
+    */
 }

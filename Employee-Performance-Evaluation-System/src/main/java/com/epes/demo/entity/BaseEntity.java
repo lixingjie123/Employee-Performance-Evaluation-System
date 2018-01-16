@@ -3,7 +3,8 @@ package com.epes.demo.entity;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 
-import java.util.Date;
+import java.sql.Date;
+
 
 /**
  * Description:
@@ -19,11 +20,11 @@ public class BaseEntity {
     @Column(name = "id", type = MySqlTypeConstant.VARCHAR, isKey = true)
     protected String id;
 
-    @Column(name = "gmt_create", type = MySqlTypeConstant.DATETIME)
-    protected Date gmtCreate;
+    @Column(name = "createtime", type = MySqlTypeConstant.DATETIME)
+    protected Date createtime;
 
-    @Column(name = "gmt_modified", type = MySqlTypeConstant.DATETIME)
-    protected Date gmtModified;
+    @Column(name = "modifiedtime", type = MySqlTypeConstant.DATETIME)
+    protected Date modifiedtime;
 
     public String getId() {
         return id;
@@ -33,19 +34,19 @@ public class BaseEntity {
         this.id = id;
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
+    public Date getCreatetime() {
+        return createtime;
     }
 
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
     }
 
-    public Date getGmtModified() {
-        return gmtModified;
+    public Date getModifiedtime() {
+        return modifiedtime;
     }
 
-    public void setGmtModified(Date gmtModified) {
-        this.gmtModified = gmtModified;
+    public void setModifiedtime(Date modifiedtime) {
+        this.modifiedtime = modifiedtime;
     }
 }

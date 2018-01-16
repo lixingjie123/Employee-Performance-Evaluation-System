@@ -2,8 +2,6 @@ package com.epes.demo.controller;
 
 
 import com.epes.demo.entity.Suser;
-import com.epes.demo.service.BaseService;
-import com.epes.demo.service.IdService;
 import com.epes.demo.service.SusersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +61,8 @@ public class TestController {
     @ResponseBody
     public String insertUser() throws NoSuchFieldException {
         Suser suser= new Suser();
-        suser.setAdd("渝北");
-        suser.setName("张三");
+        suser.setAddss("渝北");
+        suser.setUname("张三");
         suser.setRole(1);
         suser.setAge(21);
         Map<String, String> map = susersService.addUser(suser);
@@ -75,13 +73,20 @@ public class TestController {
     @ResponseBody
     public String updateUser() throws NoSuchFieldException {
         Suser suser= new Suser();
-        suser.setAdd("江北");
-        suser.setName("张三");
+        suser.setAddss("江北");
+        suser.setUname("张三");
         suser.setRole(1);
         suser.setAge(21);
-        suser.setId("42a19988f3e34b5189ea706e1038a76a");
-        suser.setCode("UX953081851571081216");
+        suser.setId("18684a44704d404e9981af7cb972c048");
+        suser.setCodes("UX953080733625487360");
         Map<String, String> map = susersService.updataUser(suser);
+        return map.get("message");
+    }
+
+    @GetMapping(value = "/deleteUser",produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public String deleteUser(){
+        Map<String, String> map = susersService.deleteUser("3c8b5de618d347b1bb22c2e13b70fe1d");
         return map.get("message");
     }
 

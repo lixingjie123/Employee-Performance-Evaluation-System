@@ -23,11 +23,4 @@ public interface SuserDao {
     @Select("select * from suser")
     List<Suser> findAllUser();
 
-    /**
-     * 新增一个用户
-     * @param susers
-     * @return
-     */
-    @Insert("insert into suser value (#{id},#{code},#{name},#{age},#{add},#{role})")
-    int insertUser(Suser susers);
 }

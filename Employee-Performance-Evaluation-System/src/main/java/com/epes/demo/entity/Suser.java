@@ -19,16 +19,16 @@ public class Suser extends BaseEntity {
     public final static String CODE_TITLE = "UX";
 
     @Column(name = "codes",type = MySqlTypeConstant.VARCHAR,isNull = false,isUnique = true)
-    private String code;
+    private String codes;
 
     @Column(name = "uname",type = MySqlTypeConstant.VARCHAR,isNull = false)
-    private String name;
+    private String uname;
 
     @Column(name = "age",type = MySqlTypeConstant.INT)
     private Integer age;
 
     @Column(name = "addss",type = MySqlTypeConstant.VARCHAR)
-    private String add;
+    private String addss;
 
     @Column(name = "role",type = MySqlTypeConstant.INT,isNull = false,length = 1)
     private Integer role;
@@ -41,22 +41,6 @@ public class Suser extends BaseEntity {
         this.role = role;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Integer getAge() {
         return age;
     }
@@ -65,23 +49,41 @@ public class Suser extends BaseEntity {
         this.age = age;
     }
 
-    public String getAdd() {
-        return add;
+    public String getCodes() {
+        return codes;
     }
 
-    public void setAdd(String add) {
-        this.add = add;
+    public void setCodes(String codes) {
+        this.codes = codes;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+    public String getAddss() {
+        return addss;
+    }
+
+    public void setAddss(String addss) {
+        this.addss = addss;
     }
 
     @Override
     public String toString() {
         return "Suser{" +
-                "id='" + id + '\'' +
-                ", code='" + code + '\'' +
-                ", name='" + name + '\'' +
+                "codes='" + codes + '\'' +
+                ", uname='" + uname + '\'' +
                 ", age=" + age +
-                ", add='" + add + '\'' +
+                ", addss='" + addss + '\'' +
                 ", role=" + role +
+                ", id='" + id + '\'' +
+                ", createtime=" + createtime +
+                ", modifiedtime=" + modifiedtime +
                 '}';
     }
 }

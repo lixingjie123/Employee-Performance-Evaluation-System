@@ -41,9 +41,9 @@ public class SusersService {
     public Map<String ,String> addUser(Suser u) throws NoSuchFieldException {
         Map<String , String> map = new HashMap<>(0);
         u.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-        u.setCode(idService.getCode(Suser.class));
+        u.setCodes(idService.getCode(Suser.class));
         try {
-            baseService.save(u);
+            baseService.insert(u);
             map.put("message","成功");
         } catch (NotTableEntityException | ColumnIsNullException | IllegalAccessException e) {
             map.put("message", e.getMessage());
@@ -55,8 +55,12 @@ public class SusersService {
     public Map<String,String> updataUser(Suser suser){
         Map<String, String> map = new HashMap<>(0);
         try {
-            baseService.updata(suser);
-            map.put("message","修改成功");
+            int p = baseService.updata(suser);
+            if (p>0){
+                map.put("message","修改成功");
+            }else {
+                map.put("message","数据不存在或数据无法修改");
+            }
         } catch (NotTableEntityException | ColumnIsNullException | IllegalAccessException e) {
             map.put("message", e.getMessage());
             e.printStackTrace();
@@ -68,9 +72,18 @@ public class SusersService {
      * 查找所有用户
      * @return
      */
-    public List<Suser> findAllUsers() throws NoSuchFieldException, IllegalAccessException {
-        String src = idService.getCode(Suser.class);
-        System.out.println(src);
+    public List<Suser> findAllUsers() {
         return susersMapper.findAllUser();
+    }
+
+    public Map<String,String> deleteUser(String id){
+        Map<String, String> map = new HashMap<>(0);
+        int p = baseService.delete(Suser.class, id);
+        if (p>0){
+            map.put("message","删除成功");
+        }else {
+            map.put("message","该数据不存在");
+        }
+        return map;
     }
 }
