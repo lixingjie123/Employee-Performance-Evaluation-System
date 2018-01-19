@@ -25,20 +25,4 @@ public class EmployeePerformanceEvaluationSystemApplicationTests {
 		System.out.println(idService.getCode("UR"));
 	}
 
-
-	/**
-	 *
-	 */
-	@Test
-	public void insertUserTest(){
-		Map<String ,Object> map = new HashMap<>();
-		Suser susers = new Suser();
-		susers.setUname("泽轩");
-		susers.setCodes("MS001");
-		susers.setRole(1);
-		susers.setAddss("重庆沙坪坝");
-		susers.setAge(21);
-		System.out.println(map.get("message"));
-
-	}
 }

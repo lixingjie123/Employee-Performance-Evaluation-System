@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <title>企业员工绩效考评系统</title>
+
+    <link rel="stylesheet" href="/login/css/font-awesome.min.css">
+
+    <link rel='stylesheet prefetch' href='/login/css/bootstrap.min.css'>
+
+    <link rel="stylesheet" href="/login/css/style.css" media="screen" type="text/css"/>
+
+    <script src="/js/jquery-2.1.4.min.js"></script>
+    <script src="/js/jquery.from.js"></script>
+</head>
+
+<body class="login-page">
+
+<div class="login-form">
+
+    <div class="login-content">
+
+        <div class="form-login-error">
+            <h3>Invalid login</h3>
+            <p>Enter <strong>demo</strong>/<strong>demo</strong> as login and password.</p>
+        </div>
+
+        <form method="post" action="/login" role="form" id="form_login">
+
+            <div class="form-group">
+
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-user"></i>
+                    </div>
+
+                    <input type="text" class="form-control" name="loginname" id="loginname" placeholder="请输入账号"
+                           autocomplete="off"/>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-lock"></i>
+                    </div>
+
+                    <input type="password" class="form-control" name="password" id="password" placeholder="请输密码"
+                           autocomplete="off"/>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <button type="button" id="btnlogin" class="btn btn-primary btn-block btn-login">
+                    <i class="fa fa-sign-in"></i>
+                    登陆
+                </button>
+            </div>
+
+            <!-- Implemented in v1.1.4 -->
+            <div class="form-group">
+                <em>- or -</em>
+            </div>
+
+            <div class="form-group">
+
+                <button type="button" class="btn btn-default btn-lg btn-block facebook-button">
+                    &#160;&#160;
+                    <i class="fa fa-facebook"></i>
+                    | Login with Facebook
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                </h4>
+            </div>
+            <div class="modal-body" id="myModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+</body>
+<script type="text/javascript">
+    $(function () {
+        var $from = $("#form_login");
+        $("#btnlogin").click(function () {
+            $from.ajaxSubmit(function (data) {
+                if (data.p !== 0){
+                    debugger;
+                    $("#myModalLabel").text = "登陆成功";
+                    $("#myModalBody").text = data.success;
+                    $("#myModal").show("fast");
+                    alert(data.success);
+
+                }else {
+                    alert(data.error);
+                }
+            });
+        });
+
+        $("#myModal").hide();
+    })
+</script>
+</html>

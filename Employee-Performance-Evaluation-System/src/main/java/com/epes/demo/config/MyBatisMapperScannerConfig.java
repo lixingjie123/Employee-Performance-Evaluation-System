@@ -1,4 +1,4 @@
-package com.epes.demo;
+package com.epes.demo.config;
 
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

@@ -5,6 +5,8 @@ import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 
+import java.io.Serializable;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -14,24 +16,37 @@ import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
  */
 
 @Table(name = "suser")
-public class Suser extends BaseEntity {
+public class Suser extends BaseEntity implements Serializable {
 
+    private final static long serialVersionUID = -3401425764178455363L;
     public final static String CODE_TITLE = "UX";
 
-    @Column(name = "codes",type = MySqlTypeConstant.VARCHAR,isNull = false,isUnique = true)
-    private String codes;
+    @Column(name = "loginname",type = MySqlTypeConstant.VARCHAR,isNull = false,isUnique = true)
+    private String loginName;
 
     @Column(name = "uname",type = MySqlTypeConstant.VARCHAR,isNull = false)
     private String uname;
 
-    @Column(name = "age",type = MySqlTypeConstant.INT)
+    @Column(name = "password", type = MySqlTypeConstant.VARCHAR,isNull = false)
+    private String password;
+
+    @Column(name = "sex", type = MySqlTypeConstant.CHAR,length = 2)
+    private String sex;
+
+    @Column(name = "age",type = MySqlTypeConstant.INT, length = 2)
     private Integer age;
 
-    @Column(name = "addss",type = MySqlTypeConstant.VARCHAR)
-    private String addss;
+    @Column(name = "phone", type = MySqlTypeConstant.VARCHAR)
+    private String phone;
+
+    @Column(name = "address",type = MySqlTypeConstant.VARCHAR)
+    private String address;
 
     @Column(name = "role",type = MySqlTypeConstant.INT,isNull = false,length = 1)
     private Integer role;
+
+    @Column(name = "deptid", type = MySqlTypeConstant.VARCHAR)
+    private String deptid;
 
     public Integer getRole() {
         return role;
@@ -49,12 +64,52 @@ public class Suser extends BaseEntity {
         this.age = age;
     }
 
-    public String getCodes() {
-        return codes;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setCodes(String codes) {
-        this.codes = codes;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDeptid() {
+        return deptid;
+    }
+
+    public void setDeptid(String deptid) {
+        this.deptid = deptid;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUname() {
@@ -65,22 +120,17 @@ public class Suser extends BaseEntity {
         this.uname = uname;
     }
 
-    public String getAddss() {
-        return addss;
-    }
-
-    public void setAddss(String addss) {
-        this.addss = addss;
-    }
-
     @Override
     public String toString() {
         return "Suser{" +
-                "codes='" + codes + '\'' +
+                "loginName='" + loginName + '\'' +
                 ", uname='" + uname + '\'' +
+                ", sex='" + sex + '\'' +
                 ", age=" + age +
-                ", addss='" + addss + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
                 ", role=" + role +
+                ", deptid='" + deptid + '\'' +
                 ", id='" + id + '\'' +
                 ", createtime=" + createtime +
                 ", modifiedtime=" + modifiedtime +

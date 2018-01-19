@@ -1,4 +1,4 @@
-package com.epes.demo;
+package com.epes.demo.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;

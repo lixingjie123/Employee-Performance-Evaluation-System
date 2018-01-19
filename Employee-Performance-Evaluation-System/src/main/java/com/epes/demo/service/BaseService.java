@@ -6,6 +6,7 @@ import com.epes.demo.tool.exception.ColumnIsNullException;
 import com.epes.demo.tool.exception.NotTableEntityException;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class BaseService {
      * @throws IllegalAccessException
      * @throws ColumnIsNullException
      */
-    public <T extends BaseEntity> int insert(T entity) throws NotTableEntityException, IllegalAccessException, ColumnIsNullException {
+    public <T extends BaseEntity> int insert(T entity) throws NotTableEntityException, IllegalAccessException, ColumnIsNullException{
        String tableName = getTableName(entity.getClass());
         int p = 0;
         if (tableName != null ){
@@ -57,10 +58,10 @@ public class BaseService {
                 // 获取父类所有属性
                 Field[] superFields = entity.getClass().getSuperclass().getDeclaredFields();
                 // 获取父类字段名和字段值
-                fieldMap.putAll(getFieldValue(superFields, entity));
+                fieldMap.putAll(getFieldValueValidation(superFields, entity));
             }
             // 获取子类字段名和字段值
-            fieldMap.putAll(getFieldValue(sonFields, entity));
+            fieldMap.putAll(getFieldValueValidation(sonFields, entity));
             // 设置新增日期
             fieldMap.put("createtime",getDateToString());
             StringBuilder sqlField = new StringBuilder();
@@ -106,7 +107,8 @@ public class BaseService {
             if (fieldMap.size() > 0){
                 // 生成所需的SQL语句段
                 for (String key: fieldMap.keySet()) {
-                    if (fieldMap.get(key) != null && !"''".equals(fieldMap.get(key))){
+                    Object keyVal = fieldMap.get(key);
+                    if (keyVal != null && (!"'null'".equals(keyVal))){
                         sqlVal.append(key + "=" + fieldMap.get(key) + ",");
                     }
                 }
@@ -143,7 +145,36 @@ public class BaseService {
      * @throws ColumnIsNullException
      * @throws IllegalAccessException
      */
-    private <T extends BaseEntity> Map<String, Object> getFieldValue(Field[] fields, T entity) throws ColumnIsNullException, IllegalAccessException {
+    private <T extends BaseEntity> Map<String, Object> getFieldValue(Field[] fields, T entity) throws IllegalAccessException, ColumnIsNullException {
+        Map<String, Object> fieldMap = new HashMap<>(0);
+        for (Field field : fields){
+            Column column = field.getAnnotation(Column.class);
+            if (column != null){
+                field.setAccessible(true);
+                Class type = field.getType();
+                // superField是父类的属性  obj是子类；
+                Object val = field.get(entity);
+                if (Objects.equals(type.getName(), "java.lang.String")) {
+                    val = "'" + val + "'";
+                }
+                String key = column.name();
+                fieldMap.put(key, val);
+            }
+        }
+        return fieldMap;
+    }
+
+
+    /**
+     * 查询Column注解，获取字段名与值（带验证非空字段）
+     * @param fields
+     * @param entity
+     * @param <T>
+     * @return
+     * @throws ColumnIsNullException
+     * @throws IllegalAccessException
+     */
+    private <T extends BaseEntity> Map<String, Object> getFieldValueValidation(Field[] fields, T entity) throws ColumnIsNullException, IllegalAccessException {
         Map<String, Object> fieldMap = new HashMap<>(0);
         for (Field field : fields){
             Column column = field.getAnnotation(Column.class);

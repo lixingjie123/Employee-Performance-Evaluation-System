@@ -3,13 +3,17 @@ package com.epes.demo.controller;
 
 import com.epes.demo.entity.Suser;
 import com.epes.demo.service.SusersService;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +35,7 @@ public class TestController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @GetMapping(value = "/login")
+    @GetMapping(value = "/PrintLog")
     @ResponseBody
     public Map<String,Object> login(){
         //日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出。
@@ -46,8 +50,6 @@ public class TestController {
 
     @GetMapping(value = "/index",produces = "text/plain;charset=utf-8")
     public String hello(){
-        String id = UUID.randomUUID().toString().replaceAll("-", "");
-        System.out.println(id);
         return "login";
     }
 
@@ -61,11 +63,19 @@ public class TestController {
     @ResponseBody
     public String insertUser() throws NoSuchFieldException {
         Suser suser= new Suser();
-        suser.setAddss("渝北");
+        suser.setAddress("渝北");
         suser.setUname("张三");
         suser.setRole(1);
         suser.setAge(21);
-        Map<String, String> map = susersService.addUser(suser);
+        suser.setLoginName("lixingjie1");
+        suser.setPassword("lixingjie");
+        suser.setSex("男");
+        Map<String, String> map = new HashMap<>(0);
+        try {
+            map = susersService.addUser(suser);
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("用户创建时，密码加密摘要不支持");
+        }
         return map.get("message");
     }
 
@@ -73,12 +83,8 @@ public class TestController {
     @ResponseBody
     public String updateUser() throws NoSuchFieldException {
         Suser suser= new Suser();
-        suser.setAddss("江北");
-        suser.setUname("张三");
-        suser.setRole(1);
-        suser.setAge(21);
-        suser.setId("18684a44704d404e9981af7cb972c048");
-        suser.setCodes("UX953080733625487360");
+        suser.setPhone("18920441234");
+        suser.setId("a2142d4491dc4d98b862aeaf7db434bb");
         Map<String, String> map = susersService.updataUser(suser);
         return map.get("message");
     }
@@ -88,6 +94,26 @@ public class TestController {
     public String deleteUser(){
         Map<String, String> map = susersService.deleteUser("3c8b5de618d347b1bb22c2e13b70fe1d");
         return map.get("message");
+    }
+
+    @GetMapping(value = "/redis")
+    @Cacheable(value = "suser")
+    @ResponseBody
+    public Suser redis(){
+        Suser suser = susersService.findById("cba9e2740c3249c7b8a0ad18260487d5");
+        System.out.println("若下面没出现“无缓存的时候调用”字样且能打印出数据表示测试成功");
+        return suser;
+    }
+
+    @GetMapping(value = "/session")
+    @ResponseBody
+    public String uid(HttpSession session) {
+        UUID uid = (UUID) session.getAttribute("uid");
+        if (uid == null) {
+            uid = UUID.randomUUID();
+        }
+        session.setAttribute("uid", uid);
+        return session.getId();
     }
 
 }
