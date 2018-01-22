@@ -6,6 +6,7 @@ import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,6 +48,39 @@ public class Suser extends BaseEntity implements Serializable {
 
     @Column(name = "deptid", type = MySqlTypeConstant.VARCHAR)
     private String deptid;
+
+    @Column(name = "id", type = MySqlTypeConstant.VARCHAR, isKey = true)
+    private String id;
+
+    @Column(name = "createtime", type = MySqlTypeConstant.DATETIME)
+    private Date createtime;
+
+    @Column(name = "modifiedtime", type = MySqlTypeConstant.DATETIME)
+    private Date modifiedtime;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public Date getModifiedtime() {
+        return modifiedtime;
+    }
+
+    public void setModifiedtime(Date modifiedtime) {
+        this.modifiedtime = modifiedtime;
+    }
 
     public Integer getRole() {
         return role;

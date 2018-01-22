@@ -42,7 +42,7 @@ public class LoginController {
             logger.error("登陆时，密码加密摘要算法不支持");
             e.printStackTrace();
         }
-        request.setAttribute("user",map.get("userinfo"));
+        request.setAttribute("userinfo",map.get("userinfo"));
         return map;
     }
 }
