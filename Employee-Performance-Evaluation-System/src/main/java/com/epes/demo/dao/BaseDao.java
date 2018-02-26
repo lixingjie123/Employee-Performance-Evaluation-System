@@ -32,7 +32,7 @@ public interface BaseDao {
      * @param id
      * @return
      */
-    @Update("update ${tableName} set ${val} where id = ${id}")
+    @Update("update ${tableName} set ${val} where id = #{id}")
     int updata(@Param("tableName")String tableName, @Param("val")String val, @Param("id")String id);
 
     /**

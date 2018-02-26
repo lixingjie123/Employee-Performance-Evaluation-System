@@ -53,7 +53,7 @@ public class Suser extends BaseEntity implements Serializable {
     private String id;
 
     @Column(name = "createtime", type = MySqlTypeConstant.DATETIME)
-    private Date createtime;
+    private String createtime;
 
     @Column(name = "modifiedtime", type = MySqlTypeConstant.DATETIME)
     private Date modifiedtime;
@@ -66,11 +66,11 @@ public class Suser extends BaseEntity implements Serializable {
         this.id = id;
     }
 
-    public Date getCreatetime() {
+    public String getCreatetime() {
         return createtime;
     }
 
-    public void setCreatetime(Date createtime) {
+    public void setCreatetime(String createtime) {
         this.createtime = createtime;
     }
 

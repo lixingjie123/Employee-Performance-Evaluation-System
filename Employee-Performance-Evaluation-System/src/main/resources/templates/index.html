@@ -1,12 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="/js/jquery-2.1.4.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
 </head>
 <body>
-<h1 id="head" th:text="${session.userinfo}">>
-</h1>
+<div id="app">
+    <p>{{ message }}</p>
+    <input v-model="message">
+</div>
 </body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: "mmsessdf"
+        }
+    });
+</script>
 </html>

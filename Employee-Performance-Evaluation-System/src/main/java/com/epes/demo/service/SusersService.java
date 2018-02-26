@@ -95,7 +95,7 @@ public class SusersService {
         return susersMapper.findAllUser();
     }
 
-    public Map<String,String> deleteUser(String id){
+    public Map<String,String> deleteUser(String id) throws NotTableEntityException {
         Map<String, String> map = new HashMap<>(0);
         int p = baseService.delete(Suser.class, id);
         if (p>0){

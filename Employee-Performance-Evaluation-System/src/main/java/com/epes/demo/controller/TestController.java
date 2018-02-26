@@ -3,16 +3,18 @@ package com.epes.demo.controller;
 
 import com.epes.demo.entity.Suser;
 import com.epes.demo.service.SusersService;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import com.epes.demo.tool.exception.NotTableEntityException;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -56,8 +58,15 @@ public class TestController {
 
     @GetMapping(value = "/findAllUsers")
     @ResponseBody
-    public List<Suser> findAllUsers() throws NoSuchFieldException, IllegalAccessException {
-        return susersService.findAllUsers();
+    public String  findAllUsers(HttpServletRequest request, HttpServletResponse response) throws NoSuchFieldException, IllegalAccessException {
+        String callback = request.getParameter("callback");
+        Gson gson = new Gson();
+        List<Suser> susers = susersService.findAllUsers();
+        String data = gson.toJson(susers);
+        if(callback != null && !"".equals(callback)){
+            data = callback + "("+data+")";
+        }
+        return data;
     }
 
     @GetMapping(value = "/insertUser",produces = "text/plain;charset=utf-8")
@@ -68,7 +77,7 @@ public class TestController {
         suser.setUname("张三");
         suser.setRole(1);
         suser.setAge(21);
-        suser.setLoginName("lixingjie1");
+        suser.setLoginName("lixingjie3");
         suser.setPassword("lixingjie");
         suser.setSex("男");
         Map<String, String> map = new HashMap<>(0);
@@ -93,7 +102,12 @@ public class TestController {
     @GetMapping(value = "/deleteUser",produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String deleteUser(){
-        Map<String, String> map = susersService.deleteUser("3c8b5de618d347b1bb22c2e13b70fe1d");
+        Map<String, String> map = new HashMap<>(0);
+        try {
+            map = susersService.deleteUser("3c8b5de618d347b1bb22c2e13b70fe1d");
+        } catch (NotTableEntityException e) {
+            e.printStackTrace();
+        }
         return map.get("message");
     }
 

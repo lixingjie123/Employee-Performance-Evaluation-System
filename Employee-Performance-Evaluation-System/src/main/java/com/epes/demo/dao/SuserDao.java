@@ -32,7 +32,7 @@ public interface SuserDao {
     @Select("select loginname from suser where loginname = #{loginname}")
     String queryByLoginName(String loginname);
 
-    @Select("select id, uname, loginname, sex, deptid, role, address, phone, age from suser where loginname = #{loginname} and password = #{password}")
+    @Select("select id, uname, loginname, sex, deptid, role, address, phone, age, createtime from suser where loginname = #{loginname} and password = #{password}")
     Suser login(@Param("loginname")String loginname, @Param("password")String password);
 
     @Select("Select * from suser where id = #{id}")

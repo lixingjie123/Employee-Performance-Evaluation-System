@@ -80,50 +80,35 @@
         </form>
     </div>
 </div>
-
-
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                </h4>
-            </div>
-            <div class="modal-body" id="myModalBody">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                </button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
-
-
 </body>
 <script type="text/javascript">
     $(function () {
-        var $from = $("#form_login");
+
         $("#btnlogin").click(function () {
+            submitLogin();
+        });
+
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                submitLogin();
+            }
+        });
+
+        var $from = $("#form_login");
+
+        function submitLogin() {
             $from.ajaxSubmit(function (data) {
-                if (data.p !== 0){
-                    debugger;
+                if (data.p !== 0) {
                     $("#myModalLabel").text = "登陆成功";
                     $("#myModalBody").text = data.success;
                     $("#myModal").show("fast");
                     alert(data.success);
                     window.location = "/toMain";
-
-                }else {
+                } else {
                     alert(data.error);
                 }
             });
-        });
-
-        $("#myModal").hide();
+        }
     })
 </script>
 </html>

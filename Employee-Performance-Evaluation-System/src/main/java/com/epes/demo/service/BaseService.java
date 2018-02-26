@@ -54,7 +54,7 @@ public class BaseService {
         if (tableName != null ){
             Map<String, Object> fieldMap = new HashMap<>(0);
             Field[] sonFields = entity.getClass().getDeclaredFields();
-            if (entity.getClass().getSuperclass() !=null) {
+            if (entity.getClass().getSuperclass() != null) {
                 // 获取父类所有属性
                 Field[] superFields = entity.getClass().getSuperclass().getDeclaredFields();
                 // 获取父类字段名和字段值
@@ -129,10 +129,15 @@ public class BaseService {
      * @param <T>
      * @return
      */
-    public <T extends BaseEntity> int delete(Class<T> entity, String id){
+    public <T extends BaseEntity> int delete(Class<T> entity, String id) throws NotTableEntityException {
         int p = 0;
         String tableName = getTableName(entity);
-        p = dao.delete(tableName, id);
+        if(tableName != null && !"".equals(tableName)){
+            p = dao.delete(tableName, id);
+        }else {
+        logger.error("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+        throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+        }
         return p;
     }
 
