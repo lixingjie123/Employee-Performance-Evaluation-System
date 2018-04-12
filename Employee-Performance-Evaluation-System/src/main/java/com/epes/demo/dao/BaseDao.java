@@ -4,6 +4,7 @@ import com.epes.demo.entity.BaseEntity;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description:
@@ -13,6 +14,8 @@ import java.util.List;
  * @Author lixingjie
  * @Modifice
  */
+
+@Mapper
 public interface BaseDao {
 
     /**
@@ -44,8 +47,10 @@ public interface BaseDao {
     @Delete("delete from ${tableName} where id = #{id}")
     int delete(@Param("tableName")String tableName, @Param("id")String id);
 
-    /*
-    @Select("select * from ${tableName}")
-    <T extends BaseEntity> List<T> query(@Param("tableName")String tableName);
-    */
+
+    @Select("select * from ${tableName} ${search} limit #{pageIndex},#{pageSize}")
+    List<Map<String, Object>> pageFind(@Param("tableName") String tableName,
+                                       @Param("search")String search,
+                                       @Param("pageIndex")int pageIndex,
+                                       @Param("pageSize")int pageSize);
 }

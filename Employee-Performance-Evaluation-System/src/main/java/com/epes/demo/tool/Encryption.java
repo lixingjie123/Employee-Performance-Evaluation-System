@@ -1,7 +1,8 @@
 package com.epes.demo.tool;
 
-import org.omg.CORBA.PRIVATE_MEMBER;
 
+import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -18,6 +19,7 @@ import static com.sun.org.apache.bcel.internal.classfile.Utility.toHexString;
 public class Encryption {
     public static final String MD5 = "MD5";
     public static final String SHA1 = "SHA1";
+    public static final String DES = "DESede";
 
     /**
      * 字符串按照MD5加密
@@ -57,5 +59,37 @@ public class Encryption {
         md.update(src.getBytes());
         String afterHexSrc = toHexString(md.digest());
         return afterHexSrc.replaceAll(" ","");
+    }
+
+    /**
+     * DES加密算法加密
+     * @param keyStr
+     * @param src
+     * @return
+     * @throws Exception
+     */
+    public static byte[] encryptDES(String keyStr, byte[] src) throws Exception{
+        // 生成密钥
+        SecretKey deskey = new SecretKeySpec(keyStr.getBytes(), DES);
+        // 加密
+        Cipher c1 = Cipher.getInstance("DESede");
+        c1.init(Cipher.ENCRYPT_MODE, deskey);
+        return c1.doFinal(src);
+    }
+
+
+    /**
+     * DES加密算法解密
+     * @param keyStr
+     * @param src
+     * @return
+     * @throws Exception
+     */
+    public static byte[] decryptDES(String keyStr, byte[] src) throws Exception {
+        SecretKey deskey = new SecretKeySpec(keyStr.getBytes(), DES);
+        // 解密
+        Cipher c1 = Cipher.getInstance("DESede");
+        c1.init(Cipher.DECRYPT_MODE, deskey);
+        return c1.doFinal(src);
     }
 }

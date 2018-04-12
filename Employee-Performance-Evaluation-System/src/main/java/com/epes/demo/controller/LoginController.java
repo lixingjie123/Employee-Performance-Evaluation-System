@@ -1,6 +1,6 @@
 package com.epes.demo.controller;
 
-import com.epes.demo.service.SusersService;
+import com.epes.demo.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,24 +25,24 @@ import java.util.Map;
 @Controller
 public class LoginController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final SusersService susersService;
+    private final UserInfoService userInfoService;
 
     @Autowired
-    public LoginController(SusersService susersService) {
-        this.susersService = susersService;
+    public LoginController(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
     }
-
+/*
     @PostMapping(value = "/login")
     @ResponseBody
     public Map<String, Object> login(HttpSession request, String loginname, String password){
         Map<String,Object> map = new HashMap<>(0);
         try {
-            map = susersService.login(loginname,password);
+            map = userInfoService.login(loginname,password);
         } catch (NoSuchAlgorithmException e) {
             logger.error("登陆时，密码加密摘要算法不支持");
             e.printStackTrace();
         }
         request.setAttribute("userinfo",map.get("userinfo"));
         return map;
-    }
+    }*/
 }

@@ -2,16 +2,17 @@ package com.epes.demo.service;
 
 import com.epes.demo.dao.BaseDao;
 import com.epes.demo.entity.BaseEntity;
+import com.epes.demo.tool.SearchParams;
 import com.epes.demo.tool.exception.ColumnIsNullException;
 import com.epes.demo.tool.exception.NotTableEntityException;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -48,20 +49,26 @@ public class BaseService {
      * @throws IllegalAccessException
      * @throws ColumnIsNullException
      */
-    public <T extends BaseEntity> int insert(T entity) throws NotTableEntityException, IllegalAccessException, ColumnIsNullException{
+    public <T extends BaseEntity> int insert(T entity){
        String tableName = getTableName(entity.getClass());
         int p = 0;
         if (tableName != null ){
             Map<String, Object> fieldMap = new HashMap<>(0);
             Field[] sonFields = entity.getClass().getDeclaredFields();
-            if (entity.getClass().getSuperclass() != null) {
-                // 获取父类所有属性
-                Field[] superFields = entity.getClass().getSuperclass().getDeclaredFields();
-                // 获取父类字段名和字段值
-                fieldMap.putAll(getFieldValueValidation(superFields, entity));
+
+            try {
+                if (entity.getClass().getSuperclass() != null) {
+                    // 获取父类所有属性
+                    Field[] superFields = entity.getClass().getSuperclass().getDeclaredFields();
+                    // 获取父类字段名和字段值
+                    fieldMap.putAll(getFieldValueValidation(superFields, entity));
+                }
+
+                // 获取子类字段名和字段值
+                fieldMap.putAll(getFieldValueValidation(sonFields, entity));
+            } catch (ColumnIsNullException | IllegalAccessException e) {
+                e.printStackTrace();
             }
-            // 获取子类字段名和字段值
-            fieldMap.putAll(getFieldValueValidation(sonFields, entity));
             // 设置新增日期
             fieldMap.put("createtime",getDateToString());
             StringBuilder sqlField = new StringBuilder();
@@ -80,7 +87,11 @@ public class BaseService {
             p = dao.insert(tableName,sqlField.toString(),sqlVal.toString());
         }else {
             logger.error("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
-            throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            try {
+                throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            } catch (NotTableEntityException e) {
+                e.printStackTrace();
+            }
         }
         return p;
     }
@@ -91,7 +102,7 @@ public class BaseService {
      * @param <T>
      * @return
      */
-    public <T extends BaseEntity> int updata(T entity) throws ColumnIsNullException, IllegalAccessException, NotTableEntityException {
+    public <T extends BaseEntity> int updata(T entity) {
         String tableName = getTableName(entity.getClass());
         int p = 0;
         if (tableName != null){
@@ -117,7 +128,11 @@ public class BaseService {
             p = dao.updata(tableName, sqlVal.toString(),fieldMap.get("id").toString());
         }else {
             logger.error("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
-            throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            try {
+                throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            } catch (NotTableEntityException e) {
+                e.printStackTrace();
+            }
         }
         return p;
     }
@@ -129,17 +144,55 @@ public class BaseService {
      * @param <T>
      * @return
      */
-    public <T extends BaseEntity> int delete(Class<T> entity, String id) throws NotTableEntityException {
+    public <T extends BaseEntity> int delete(Class<T> entity, String id)  {
         int p = 0;
         String tableName = getTableName(entity);
         if(tableName != null && !"".equals(tableName)){
             p = dao.delete(tableName, id);
         }else {
         logger.error("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
-        throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            try {
+                throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            } catch (NotTableEntityException e) {
+                e.printStackTrace();
+            }
         }
         return p;
     }
+
+    /**
+     * 按条件分页查询
+     * @param <T>
+     * @param entity
+     * @param pageRequest
+     * @param searchParams
+     * @return
+     */
+    public <T extends BaseEntity> List<Map<String, Object>> pageFindByCondition(Class<T> entity, PageRequest pageRequest, SearchParams searchParams){
+        String tableName = getTableName(entity);
+        int pageIndex = pageRequest.getPageNumber();
+        int pageSize = pageRequest.getPageSize();
+        Map<String, Object> searchMap = searchParams.getSearchMap();
+        StringBuilder search = new StringBuilder();
+        if(tableName != null && !"".equals(tableName)){
+            if (searchMap.size() != 0){
+                search.append(" where 1=1 ");
+                // 获取条件
+                for(String key : searchMap.keySet()){
+                    search.append(" and ").append(key).append(" = ").append(searchMap.get(key));
+                }
+            }
+        }else {
+            logger.error("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            try {
+                throw new NotTableEntityException("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
+            } catch (NotTableEntityException e) {
+                e.printStackTrace();
+            }
+        }
+        return dao.pageFind(tableName, search.toString(), pageIndex, pageSize);
+    }
+
 
     /**
      * 查询Column注解，获取字段名与值
@@ -150,7 +203,7 @@ public class BaseService {
      * @throws ColumnIsNullException
      * @throws IllegalAccessException
      */
-    private <T extends BaseEntity> Map<String, Object> getFieldValue(Field[] fields, T entity) throws IllegalAccessException, ColumnIsNullException {
+    private <T extends BaseEntity> Map<String, Object> getFieldValue(Field[] fields, T entity) {
         Map<String, Object> fieldMap = new HashMap<>(0);
         for (Field field : fields){
             Column column = field.getAnnotation(Column.class);
@@ -158,7 +211,12 @@ public class BaseService {
                 field.setAccessible(true);
                 Class type = field.getType();
                 // superField是父类的属性  obj是子类；
-                Object val = field.get(entity);
+                Object val = null;
+                try {
+                    val = field.get(entity);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
                 if (Objects.equals(type.getName(), "java.lang.String")) {
                     val = "'" + val + "'";
                 }
