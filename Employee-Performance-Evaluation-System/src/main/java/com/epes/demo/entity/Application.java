@@ -8,11 +8,10 @@ import lombok.Setter;
 
 import java.util.Date;
 
-
 /**
  * Description:
- * Date: 2018/4/2
- * Time: 9:52
+ * Date: 2018/4/17
+ * Time: 16:56
  *
  * @Author lixingjie
  * @Modifice
@@ -20,23 +19,13 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Table(name = "demo_project")
-public class Project extends BaseEntity {
-
+@Table(name = "demo_application")
+public class Application extends BaseEntity {
     @Column(name = "id", type = MySqlTypeConstant.CHAR, isKey = true, length = 36)
     private String id;
 
-    @Column(name = "name", type = MySqlTypeConstant.VARCHAR,isNull = false)
-    private String name;
-
-    @Column(name = "startdate", type = MySqlTypeConstant.DATETIME)
-    private Date startdate;
-
-    @Column(name = "enddate", type = MySqlTypeConstant.DATETIME)
-    private Date enddate;
-
-    @Column(name = "deptid", type = MySqlTypeConstant.VARCHAR)
-    private String deptid;
+    @Column(name = "url", type = MySqlTypeConstant.VARCHAR, isNull = false)
+    private String url;
 
     @Column(name = "createtime", type = MySqlTypeConstant.DATETIME)
     private Date createtime;
@@ -46,5 +35,4 @@ public class Project extends BaseEntity {
 
     @Column(name = "dr",type = MySqlTypeConstant.INT)
     private Integer dr;
-
 }

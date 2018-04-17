@@ -125,7 +125,7 @@ public class BaseService {
                 }
                 sqlVal.deleteCharAt(sqlVal.length()-1);
             }
-            p = dao.updata(tableName, sqlVal.toString(),fieldMap.get("id").toString());
+            p = dao.update(tableName, sqlVal.toString(),fieldMap.get("id").toString());
         }else {
             logger.error("'"+entity.getClass().getSimpleName() + "' 类不是表格实体");
             try {

@@ -4,9 +4,11 @@ package com.epes.demo.entity;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +18,8 @@ import java.sql.Date;
  * Time: 15:39
  */
 
+@Getter
+@Setter
 @Table(name = "demo_user_info")
 public class UserInfo extends BaseEntity implements Serializable {
     public final static String CODE_TITLE = "UX";
@@ -25,6 +29,9 @@ public class UserInfo extends BaseEntity implements Serializable {
 
     @Column(name = "name",type = MySqlTypeConstant.VARCHAR,isNull = false)
     private String name;
+
+    @Column(name = "loginname", type = MySqlTypeConstant.VARCHAR, length = 36,isNull = false)
+    private String loginName;
 
     @Column(name = "sex", type = MySqlTypeConstant.CHAR,length = 2)
     private String sex;
@@ -50,7 +57,7 @@ public class UserInfo extends BaseEntity implements Serializable {
     private String deptName;
 
     @Column(name = "createtime", type = MySqlTypeConstant.DATETIME)
-    private String createtime;
+    private Date createtime;
 
     @Column(name = "modifiedtime", type = MySqlTypeConstant.DATETIME)
     private Date modifiedtime;
@@ -58,91 +65,4 @@ public class UserInfo extends BaseEntity implements Serializable {
     @Column(name = "dr",type = MySqlTypeConstant.INT)
     private Integer dr;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getDeptid() {
-        return deptid;
-    }
-
-    public void setDeptid(String deptid) {
-        this.deptid = deptid;
-    }
-
-    public String getCreatetime() {
-        return createtime;
-    }
-
-    public void setCreatetime(String createtime) {
-        this.createtime = createtime;
-    }
-
-    public Date getModifiedtime() {
-        return modifiedtime;
-    }
-
-    public void setModifiedtime(Date modifiedtime) {
-        this.modifiedtime = modifiedtime;
-    }
-
-    public Integer getDr() {
-        return dr;
-    }
-
-    public void setDr(Integer dr) {
-        this.dr = dr;
-    }
-
-    public String getDeptName() {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
 }

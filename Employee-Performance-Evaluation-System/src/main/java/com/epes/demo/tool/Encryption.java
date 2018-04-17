@@ -55,7 +55,7 @@ public class Encryption {
      * @return 16进制字符串
      */
     public static String encoder(String src, String algorithm) throws NoSuchAlgorithmException {
-        MessageDigest md  = md = MessageDigest.getInstance(algorithm);
+        MessageDigest md  = MessageDigest.getInstance(algorithm);
         md.update(src.getBytes());
         String afterHexSrc = toHexString(md.digest());
         return afterHexSrc.replaceAll(" ","");
@@ -91,5 +91,13 @@ public class Encryption {
         Cipher c1 = Cipher.getInstance("DESede");
         c1.init(Cipher.DECRYPT_MODE, deskey);
         return c1.doFinal(src);
+    }
+
+    /**
+     * 将byte转换成六进制字符串
+     */
+        public static String ToHexString(byte[] src){
+        String afterHexSrc = toHexString(src);
+        return afterHexSrc.replaceAll(" ","");
     }
 }

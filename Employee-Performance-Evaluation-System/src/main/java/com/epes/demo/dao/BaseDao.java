@@ -36,7 +36,7 @@ public interface BaseDao {
      * @return
      */
     @Update("update ${tableName} set ${val} where id = #{id}")
-    int updata(@Param("tableName")String tableName, @Param("val")String val, @Param("id")String id);
+    int update(@Param("tableName")String tableName, @Param("val")String val, @Param("id")String id);
 
     /**
      * 公共接口：通过 id 删除数据库数据
@@ -47,7 +47,14 @@ public interface BaseDao {
     @Delete("delete from ${tableName} where id = #{id}")
     int delete(@Param("tableName")String tableName, @Param("id")String id);
 
-
+    /**
+     * 公共接口：分页条件查询
+     * @param tableName
+     * @param search
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     @Select("select * from ${tableName} ${search} limit #{pageIndex},#{pageSize}")
     List<Map<String, Object>> pageFind(@Param("tableName") String tableName,
                                        @Param("search")String search,

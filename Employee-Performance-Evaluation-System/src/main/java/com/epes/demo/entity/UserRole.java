@@ -11,32 +11,24 @@ import java.util.Date;
 
 /**
  * Description:
- * Date: 2018/4/2
- * Time: 9:52
+ * Date: 2018/4/17
+ * Time: 9:56
  *
  * @Author lixingjie
  * @Modifice
+ * 用户角色表
  */
 
 @Getter
 @Setter
-@Table(name = "demo_project")
-public class Project extends BaseEntity {
+@Table(name = "demo_user_role")
+public class UserRole extends BaseEntity {
 
-    @Column(name = "id", type = MySqlTypeConstant.CHAR, isKey = true, length = 36)
-    private String id;
+    @Column(name = "userid",type = MySqlTypeConstant.VARCHAR, isNull = false)
+    private String userid;
 
-    @Column(name = "name", type = MySqlTypeConstant.VARCHAR,isNull = false)
-    private String name;
-
-    @Column(name = "startdate", type = MySqlTypeConstant.DATETIME)
-    private Date startdate;
-
-    @Column(name = "enddate", type = MySqlTypeConstant.DATETIME)
-    private Date enddate;
-
-    @Column(name = "deptid", type = MySqlTypeConstant.VARCHAR)
-    private String deptid;
+    @Column(name = "roleid", type = MySqlTypeConstant.VARCHAR, isNull = false)
+    private String roleid;
 
     @Column(name = "createtime", type = MySqlTypeConstant.DATETIME)
     private Date createtime;

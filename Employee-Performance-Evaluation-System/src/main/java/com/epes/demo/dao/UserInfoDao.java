@@ -1,10 +1,7 @@
 package com.epes.demo.dao;
 
 import com.epes.demo.entity.UserInfo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -19,4 +16,9 @@ import java.util.List;
 @Mapper
 public interface UserInfoDao {
 
+    @Update("update demo_user_info set deptid = #{deptid} where id = #{id}")
+    void UpdateDept(@Param("deptid")String deptid, @Param("id")String id);
+
+    @Select("select * from demo_user_info where id = #{id}")
+    UserInfo findUser(String id);
 }

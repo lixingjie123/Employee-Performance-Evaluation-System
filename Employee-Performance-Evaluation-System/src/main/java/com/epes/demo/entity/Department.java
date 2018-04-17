@@ -3,6 +3,8 @@ package com.epes.demo.entity;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -16,6 +18,8 @@ import java.util.Date;
  * @Modifice
  */
 
+@Getter
+@Setter
 @Table(name = "demo_department")
 public class Department extends BaseEntity{
 
@@ -34,43 +38,4 @@ public class Department extends BaseEntity{
     @Column(name = "dr",type = MySqlTypeConstant.INT)
     private Integer dr;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getCreatetime() {
-        return createtime;
-    }
-
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
-    }
-
-    public Date getModifiedtime() {
-        return modifiedtime;
-    }
-
-    public void setModifiedtime(Date modifiedtime) {
-        this.modifiedtime = modifiedtime;
-    }
-
-    public Integer getDr() {
-        return dr;
-    }
-
-    public void setDr(Integer dr) {
-        this.dr = dr;
-    }
 }

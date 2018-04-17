@@ -3,6 +3,8 @@ package com.epes.demo.entity;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -15,6 +17,8 @@ import java.util.Date;
  * @Modifice
  */
 
+@Getter
+@Setter
 @Table(name = "demo_worklog")
 public class WorkLog extends BaseEntity{
 
@@ -55,91 +59,4 @@ public class WorkLog extends BaseEntity{
 
     private String pojName;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getStartdate() {
-        return startdate;
-    }
-
-    public void setStartdate(Date startdate) {
-        this.startdate = startdate;
-    }
-
-    public Date getEnddate() {
-        return enddate;
-    }
-
-    public void setEnddate(Date enddate) {
-        this.enddate = enddate;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getCreatetime() {
-        return createtime;
-    }
-
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
-    }
-
-    public Date getModifiedtime() {
-        return modifiedtime;
-    }
-
-    public void setModifiedtime(Date modifiedtime) {
-        this.modifiedtime = modifiedtime;
-    }
-
-    public Integer getDr() {
-        return dr;
-    }
-
-    public void setDr(Integer dr) {
-        this.dr = dr;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserNmae() {
-        return userNmae;
-    }
-
-    public void setUserNmae(String userNmae) {
-        this.userNmae = userNmae;
-    }
-
-    public String getPojId() {
-        return pojId;
-    }
-
-    public void setPojId(String pojId) {
-        this.pojId = pojId;
-    }
-
-    public String getPojName() {
-        return pojName;
-    }
-
-    public void setPojName(String pojName) {
-        this.pojName = pojName;
-    }
 }
