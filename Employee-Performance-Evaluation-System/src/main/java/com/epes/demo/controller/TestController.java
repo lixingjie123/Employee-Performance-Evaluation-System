@@ -59,12 +59,9 @@ public class TestController {
         return map;
     }
 
-    @GetMapping(value = "/index",produces = "text/plain;charset=utf-8")
-    public String hello(){
-        return "login";
-    }
 
-    @GetMapping(value = "/findAllUsers")
+
+/*    @GetMapping(value = "/findAllUsers")
     @ResponseBody
     public String  findAllUsers(HttpServletRequest request, HttpServletResponse response) throws NoSuchFieldException, IllegalAccessException {
         Gson gson = new Gson();
@@ -73,7 +70,7 @@ public class TestController {
         List<Map<String, Object>> susers = userInfoService.findAllUsers(pageRequest,searchParams);
         String data = gson.toJson(susers);
         return data;
-    }
+    }*/
 /*
     @GetMapping(value = "/redis")
     @Cacheable(value = "suser")

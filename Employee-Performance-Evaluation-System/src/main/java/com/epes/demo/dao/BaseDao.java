@@ -25,7 +25,7 @@ public interface BaseDao {
      * @param val
      * @return
      */
-    @Insert("insert into ${tableName}(${field}) values(${val})")
+    @Insert(value = "insert into ${tableName}(${field}) values(${val})")
     int insert(@Param("tableName")String tableName, @Param("field")String field, @Param("val")String val);
 
     /**
@@ -35,7 +35,7 @@ public interface BaseDao {
      * @param id
      * @return
      */
-    @Update("update ${tableName} set ${val} where id = #{id}")
+    @Update(value = "update ${tableName} set ${val} where id = ${id}")
     int update(@Param("tableName")String tableName, @Param("val")String val, @Param("id")String id);
 
     /**
@@ -44,7 +44,7 @@ public interface BaseDao {
      * @param id
      * @return
      */
-    @Delete("delete from ${tableName} where id = #{id}")
+    @Delete(value = "delete from ${tableName} where id = #{id}")
     int delete(@Param("tableName")String tableName, @Param("id")String id);
 
     /**
@@ -55,7 +55,7 @@ public interface BaseDao {
      * @param pageSize
      * @return
      */
-    @Select("select * from ${tableName} ${search} limit #{pageIndex},#{pageSize}")
+    @Select(value = "select * from ${tableName} ${search} limit #{pageIndex},#{pageSize}")
     List<Map<String, Object>> pageFind(@Param("tableName") String tableName,
                                        @Param("search")String search,
                                        @Param("pageIndex")int pageIndex,

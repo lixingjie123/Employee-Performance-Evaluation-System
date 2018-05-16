@@ -98,14 +98,14 @@
 
         function submitLogin() {
             $from.ajaxSubmit(function (data) {
-                if (data.p !== 0) {
+                if (data.success === "success") {
                     $("#myModalLabel").text = "登陆成功";
                     $("#myModalBody").text = data.success;
                     $("#myModal").show("fast");
-                    alert(data.success);
-                    window.location = "http://localhost:8081";
+                    alert(data.msg);
+                    window.location = "http://localhost:8081/#/?id="+data.userid;
                 } else {
-                    alert(data.error);
+                    alert(data.msg);
                 }
             });
         }

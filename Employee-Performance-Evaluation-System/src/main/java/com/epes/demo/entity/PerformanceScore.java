@@ -8,32 +8,36 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
 /**
  * Description:
- * Date: 2018/4/2
- * Time: 9:59
+ * Date: 2018/5/2
+ * Time: 10:21
  *
  * @Author lixingjie
  * @Modifice
  */
-
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
 @ToString
-@Table(name = "demo_worklog")
-public class WorkLog extends BaseEntity{
+@Table(name = "demo_performance_score")
+public class PerformanceScore extends BaseEntity{
 
     @Column(name = "id", type = MySqlTypeConstant.CHAR, isKey = true, length = 36)
-    private String id;
+    private String id ;
 
-    @Column(name = "workdate", type = MySqlTypeConstant.DATETIME)
-    private String workdate;
+    @Column(name = "startdate", type = MySqlTypeConstant.DATETIME)
+    private String startdate;
 
-    @Column(name = "content", type = MySqlTypeConstant.TEXT, isNull = false)
-    private String content;
+    @Column(name = "enddate", type = MySqlTypeConstant.DATETIME)
+    private String enddate;
+
+    @Column(name = "score", type = MySqlTypeConstant.INT,isNull = false)
+    private String score;
+
+    @Column(name = "review", type = MySqlTypeConstant.VARCHAR)
+    private String review;
+
 
     @Column(name = "createtime", type = MySqlTypeConstant.DATETIME)
     private String createtime;
@@ -45,19 +49,18 @@ public class WorkLog extends BaseEntity{
     private Integer dr;
 
     /**
-     * 关联用户表
+     * 关联被评人
      */
-    @Column(name = "userid", type = MySqlTypeConstant.CHAR, isNull = false)
-    private String userid;
+    @Column(name = "empid", type = MySqlTypeConstant.VARCHAR)
+    private String empid;
 
-    private String usernmae;
+    private String empName;
 
     /**
-     * 关联项目表
+     * 关联评分人
      */
-    @Column(name = "pojid", type = MySqlTypeConstant.CHAR, isNull = false)
-    private String pojid;
+    @Column(name = "leaderid", type = MySqlTypeConstant.VARCHAR)
+    private String leaderid;
 
-    private String pojname;
-
+    private String leaderName;
 }

@@ -21,4 +21,10 @@ public interface UserInfoDao {
 
     @Select("select * from demo_user_info where id = #{id}")
     UserInfo findUser(String id);
+
+    @Select("select * from demo_user_info where loginname = #{loginName}")
+    UserInfo findUserByLoginName(String loginName);
+
+    @Select("select id,name,code from demo_user_info")
+    List<UserInfo> findAllUser();
 }

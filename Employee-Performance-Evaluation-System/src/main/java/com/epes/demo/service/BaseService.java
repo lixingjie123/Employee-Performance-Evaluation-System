@@ -76,10 +76,13 @@ public class BaseService {
             if (fieldMap.size() > 0){
                 // 生成SQL所需的语句段
                 for (String key: fieldMap.keySet()) {
-                    sqlField.append(key);
-                    sqlVal.append(fieldMap.get(key));
-                    sqlField.append(',');
-                    sqlVal.append(',');
+                    Object keyVal = fieldMap.get(key);
+                    if (!"".equals(keyVal) && keyVal != null && (!"'null'".equals(keyVal))){
+                        sqlField.append(key);
+                        sqlVal.append(fieldMap.get(key));
+                        sqlField.append(',');
+                        sqlVal.append(',');
+                    }
                 }
                 sqlField.deleteCharAt(sqlField.length()-1);
                 sqlVal.deleteCharAt(sqlVal.length()-1);
@@ -102,7 +105,7 @@ public class BaseService {
      * @param <T>
      * @return
      */
-    public <T extends BaseEntity> int updata(T entity) {
+    public <T extends BaseEntity> int update(T entity) {
         String tableName = getTableName(entity.getClass());
         int p = 0;
         if (tableName != null){
@@ -119,8 +122,8 @@ public class BaseService {
                 // 生成所需的SQL语句段
                 for (String key: fieldMap.keySet()) {
                     Object keyVal = fieldMap.get(key);
-                    if (keyVal != null && (!"'null'".equals(keyVal))){
-                        sqlVal.append(key + "=" + fieldMap.get(key) + ",");
+                    if (!"".equals(keyVal) && keyVal != null && (!"'null'".equals(keyVal)) && !"''".equals(keyVal)){
+                        sqlVal.append(key).append("=").append(fieldMap.get(key)).append(",");
                     }
                 }
                 sqlVal.deleteCharAt(sqlVal.length()-1);
@@ -170,8 +173,14 @@ public class BaseService {
      */
     public <T extends BaseEntity> List<Map<String, Object>> pageFindByCondition(Class<T> entity, PageRequest pageRequest, SearchParams searchParams){
         String tableName = getTableName(entity);
-        int pageIndex = pageRequest.getPageNumber();
-        int pageSize = pageRequest.getPageSize();
+        int pageIndex = 0;
+        if (pageRequest.getPageNumber() > 0){
+            pageIndex = pageRequest.getPageNumber();
+        }
+        int pageSize = 20;
+        if (  pageRequest.getPageSize() > 0){
+            pageSize = pageRequest.getPageSize();
+        }
         Map<String, Object> searchMap = searchParams.getSearchMap();
         StringBuilder search = new StringBuilder();
         if(tableName != null && !"".equals(tableName)){
@@ -179,7 +188,9 @@ public class BaseService {
                 search.append(" where 1=1 ");
                 // 获取条件
                 for(String key : searchMap.keySet()){
-                    search.append(" and ").append(key).append(" = ").append(searchMap.get(key));
+                    if (searchMap.get(key)!= null && !"".equals(searchMap.get(key))){
+                        search.append(" and ").append(key).append(" like '%").append(searchMap.get(key)).append("%'");
+                    }
                 }
             }
         }else {

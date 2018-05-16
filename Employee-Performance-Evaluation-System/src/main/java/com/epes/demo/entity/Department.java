@@ -3,8 +3,10 @@ package com.epes.demo.entity;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -20,6 +22,8 @@ import java.util.Date;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = false)
+@ToString
 @Table(name = "demo_department")
 public class Department extends BaseEntity{
 
@@ -29,13 +33,23 @@ public class Department extends BaseEntity{
     @Column(name = "name", type = MySqlTypeConstant.VARCHAR,isNull = false)
     private String name;
 
+    @Column(name = "code",type = MySqlTypeConstant.VARCHAR)
+    private String code;
+
     @Column(name = "createtime", type = MySqlTypeConstant.DATETIME)
-    private Date createtime;
+    private String createtime;
 
     @Column(name = "modifiedtime", type = MySqlTypeConstant.DATETIME)
-    private Date modifiedtime;
+    private String modifiedtime;
 
     @Column(name = "dr",type = MySqlTypeConstant.INT)
     private Integer dr;
 
+    // 关联用户表
+    @Column(name = "userid",type = MySqlTypeConstant.VARCHAR)
+    private String userid;
+
+    private String userName;
+    private String phone;
+    private String userCode;
 }
