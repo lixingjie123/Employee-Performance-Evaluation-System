@@ -41,7 +41,7 @@ public interface WorkLogDao {
             "WHERE\n" +
             "demo_worklog.userid = #{userid} and\n" +
             "demo_worklog.workdate BETWEEN  #{startdate} and #{enddate} and\n" +
-            "demo_worklog.pojid like '%${pojid}%'")
+            "demo_worklog.pojid like '%${pojid}%' order by workdate desc")
     List<WorkLog> findLogByUserId(@Param("userid") String userid, @Param("pojid") String pojid,
                                   @Param("startdate") String startdate, @Param("enddate") String enddate);
 

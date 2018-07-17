@@ -31,6 +31,6 @@ public interface ScoreDao {
             "WHERE\n" +
             "demo_performance_score.empid = #{userid}\n" +
             "ORDER BY\n" +
-            "demo_performance_score.createtime DESC")
+            "demo_performance_score.createtime asc")
     List<PerformanceScore> findScoreByEmpid(@Param("userid") String userid);
 }
